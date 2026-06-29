@@ -1,0 +1,228 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════
+   BASE — reset, scrollbar, selection, focus
+═══════════════════════════════════════════════════════════ */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-white text-ink-800 antialiased;
+  }
+
+  /* Thin custom scrollbar */
+  ::-webkit-scrollbar       { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { @apply bg-ink-800; }
+  ::-webkit-scrollbar-thumb { @apply bg-ink-500 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-gold; }
+
+  /* Selection */
+  ::selection { background-color: rgba(201, 168, 124, 0.28); }
+
+  /* Keyboard focus ring */
+  :focus-visible {
+    outline: 2px solid #C9A87C;
+    outline-offset: 3px;
+  }
+  :focus:not(:focus-visible) { outline: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   COMPONENTS — reusable design-system classes
+═══════════════════════════════════════════════════════════ */
+@layer components {
+
+  /* ── Layout ── */
+  .container-wide {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-20 lg:py-28;
+  }
+
+  /* ── Typography ── */
+  .label-text {
+    @apply text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-gold;
+  }
+
+  .heading-display {
+    @apply font-serif text-4xl sm:text-5xl lg:text-[3.75rem]
+           font-bold leading-[1.08] tracking-[-0.02em];
+  }
+
+  .heading-section {
+    @apply font-serif text-[1.875rem] sm:text-[2.25rem]
+           font-bold leading-[1.2] tracking-[-0.015em];
+  }
+
+  .body-large {
+    @apply text-[1.0625rem] leading-[1.78];
+  }
+
+  /* ── Buttons ── */
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2
+           bg-gold text-white
+           font-semibold text-[0.8125rem] tracking-[0.04em]
+           px-7 py-[15px] select-none
+           transition-all duration-200
+           hover:bg-gold-dark active:scale-[0.98]
+           whitespace-nowrap cursor-pointer;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2
+           border border-white/25 text-white
+           font-semibold text-[0.8125rem] tracking-[0.04em]
+           px-7 py-[15px] select-none
+           transition-all duration-200
+           hover:border-white/50 hover:bg-white/[0.06] active:scale-[0.98]
+           whitespace-nowrap cursor-pointer;
+  }
+
+  /* ── Calculator range slider ── */
+  .calc-range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 2px;
+    border-radius: 9999px;
+    background: linear-gradient(
+      to right,
+      #C9A87C var(--range-pct, 22%),
+      #E8E0D6 var(--range-pct, 22%)
+    );
+    cursor: pointer;
+    outline: none;
+  }
+  .calc-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #C9A87C;
+    box-shadow: 0 0 0 3px #fff, 0 0 0 4.5px rgba(201,168,124,0.35);
+    cursor: pointer;
+    transition: box-shadow 0.15s ease;
+  }
+  .calc-range::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 3px #fff, 0 0 0 5.5px rgba(201,168,124,0.55);
+  }
+  .calc-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    background: #C9A87C;
+    cursor: pointer;
+  }
+
+  /* ── Form fields ── */
+  .input-field {
+    @apply w-full bg-transparent appearance-none
+           border-0 border-b border-ink-200
+           text-ink-800 placeholder-ink-300 text-[0.9375rem]
+           py-3 focus:outline-none focus:border-gold
+           transition-colors duration-200;
+  }
+
+  .input-field-dark {
+    @apply w-full bg-transparent appearance-none
+           border-0 border-b border-white/[0.18]
+           text-white placeholder-white/[0.28] text-[0.9375rem]
+           py-3 focus:outline-none focus:border-gold
+           transition-colors duration-200;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════════════════════════ */
+
+/* Будь-який елемент з [data-reveal] стартує невидимим.
+   ScrollObserver додає .is-visible коли елемент потрапляє у viewport. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity  0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PREMIUM KEYFRAMES
+═══════════════════════════════════════════════════════════ */
+
+@keyframes goldGlow {
+  0%, 100% { text-shadow: 0 0 0px rgba(201,168,124,0); }
+  50%       { text-shadow: 0 0 18px rgba(201,168,124,0.5); }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes scaleInX {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Utility classes */
+.animate-gold-glow  { animation: goldGlow 3.5s ease-in-out infinite; }
+.animate-float      { animation: floatY  5s ease-in-out infinite; }
+
+/* Gold shimmer text — застосовується до hero-метрик */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #C9A87C 0%,
+    #E8D09F 40%,
+    #C9A87C 60%,
+    #A8895C 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════════════════════ */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* CSS grain texture — apply to parent with position:relative and overflow:hidden */
+  .noise-layer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    z-index: 0;
+  }
+}
