@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -54,9 +53,9 @@ const STATUS_OPTIONS: { value: LeadStatus; label: string }[] = [
 ];
 
 const STATUS_STYLE: Record<LeadStatus, { bg: string; text: string; border: string; dot: string }> = {
-  new:         { bg: "bg-violet-900/20",  text: "text-violet-300",  border: "border-violet-500/30",  dot: "bg-violet-400"  },
-  in_progress: { bg: "bg-blue-900/20",    text: "text-blue-300",    border: "border-blue-500/30",    dot: "bg-blue-400"    },
-  done:        { bg: "bg-emerald-900/20", text: "text-emerald-300", border: "border-emerald-500/30", dot: "bg-emerald-400" },
+  new:         { bg: "bg-amber-900/20",   text: "text-amber-400",   border: "border-amber-500/30",   dot: "bg-amber-400"   },
+  in_progress: { bg: "bg-blue-900/20",    text: "text-blue-400",    border: "border-blue-500/30",    dot: "bg-blue-400"    },
+  done:        { bg: "bg-orange-900/20",  text: "text-orange-400",  border: "border-orange-500/30",  dot: "bg-[#FF6B00]"   },
 };
 
 const ICON_KEYS = ["landing", "corporate", "catalog", "crm"] as const;
@@ -112,38 +111,23 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B090A] flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Violet ambient glow */}
+    <div className="min-h-screen bg-[#120E0B] flex items-center justify-center px-4">
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 55% 45% at 50% 50%, rgba(124,58,237,0.10) 0%, transparent 70%)" }}
-      />
-      {/* Wood texture overlay */}
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-repeat opacity-[0.12] mix-blend-overlay pointer-events-none"
+        className="absolute inset-0 bg-repeat opacity-[0.18] mix-blend-overlay pointer-events-none"
         style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/dark-matter.png')" }}
       />
-
-      <motion.div
-        initial={{ opacity: 0, y: 24, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full max-w-sm"
-      >
-        {/* Logo */}
+      <div className="relative w-full max-w-sm">
         <div className="flex items-baseline gap-[2px] justify-center mb-10 select-none">
           <span className="font-mono text-[1.25rem] font-black tracking-[0.08em] uppercase text-white">СТЕЙК</span>
-          <span className="font-mono text-sm text-violet-400/60">.<span className="animate-slash">/</span></span>
+          <span className="font-mono text-sm text-[#FF6B00]/60">.<span className="animate-slash">/</span></span>
         </div>
-        <p className="text-center text-[0.6875rem] text-zinc-600 tracking-[0.18em] uppercase mb-8">
+        <p className="text-center text-[0.6875rem] text-amber-100/25 tracking-[0.18em] uppercase mb-8">
           Адмін панель
         </p>
-
         <form onSubmit={submit} className={shake ? "animate-[shake_0.5s_ease]" : ""}>
           <div className="mb-5">
-            <label className="block text-[0.6875rem] text-zinc-500 tracking-[0.12em] uppercase mb-2.5">
+            <label className="block text-[0.6875rem] text-amber-100/30 tracking-[0.12em] uppercase mb-2.5">
               Пароль
             </label>
             <div className="relative">
@@ -153,18 +137,18 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
                 onChange={(e) => setPw(e.target.value)}
                 autoFocus
                 placeholder="••••••••"
-                className={`w-full bg-violet-900/[0.06] border px-4 py-3.5 text-white text-sm
-                            placeholder-zinc-600 focus:outline-none transition-colors
+                className={`w-full bg-white/[0.04] border px-4 py-3.5 text-white text-sm
+                            placeholder-white/15 focus:outline-none transition-colors
                             ${shake
                               ? "border-red-500/60"
-                              : "border-violet-900/30 focus:border-violet-500/50"
+                              : "border-amber-900/30 focus:border-[#FF6B00]/50"
                             }`}
               />
               <button
                 type="button"
                 tabIndex={-1}
                 onClick={() => setShow(!show)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 hover:text-zinc-400 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/55 transition-colors"
               >
                 <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
                   {show
@@ -181,25 +165,18 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
               </p>
             )}
           </div>
-
-          <motion.button
+          <button
             type="submit"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="w-full py-3.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm
-                       font-black tracking-[0.08em] uppercase
-                       shadow-[0_0_20px_rgba(124,58,237,0.28)] hover:shadow-[0_0_32px_rgba(124,58,237,0.48)]
-                       transition-shadow duration-200"
+            className="w-full py-3.5 bg-[#FF6B00] text-black text-sm font-black
+                       tracking-[0.08em] uppercase hover:bg-[#e55f00] transition-colors active:scale-[0.98]"
           >
             Увійти
-          </motion.button>
+          </button>
         </form>
-
-        <p className="mt-10 text-center text-[0.625rem] text-zinc-700">
+        <p className="mt-10 text-center text-[0.625rem] text-amber-100/12">
           © {new Date().getFullYear()} СТЕЙК./
         </p>
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -218,8 +195,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         "/api/admin/seed", { method: "POST" }
       );
       const msg = [
-        res.seeded.length              ? `✓ Додано: ${res.seeded.join(", ")}`              : "",
-        res.skipped.length             ? `→ Пропущено (вже є): ${res.skipped.join(", ")}`  : "",
+        res.seeded.length             ? `✓ Додано: ${res.seeded.join(", ")}`              : "",
+        res.skipped.length            ? `→ Пропущено (вже є): ${res.skipped.join(", ")}`  : "",
         Object.keys(res.errors).length ? `✗ Помилки: ${JSON.stringify(res.errors)}`        : "",
       ].filter(Boolean).join("\n");
       alert(msg || "Готово");
@@ -236,27 +213,27 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0B090A] flex flex-col">
+    <div className="min-h-screen bg-[#120E0B] flex flex-col">
 
       {/* ── Header ── */}
-      <header className="bg-[#07060A] border-b border-violet-900/25 shrink-0">
+      <header className="bg-[#0e0b08] border-b border-amber-900/25 shrink-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="flex items-baseline gap-[2px] select-none">
               <span className="font-mono text-[0.9375rem] font-black tracking-[0.08em] uppercase text-white">СТЕЙК</span>
-              <span className="font-mono text-[0.8125rem] text-violet-400/50">.<span className="animate-slash">/</span></span>
+              <span className="font-mono text-[0.8125rem] text-[#FF6B00]/50">.<span className="animate-slash">/</span></span>
             </span>
-            <span className="w-px h-4 bg-violet-900/40 hidden sm:block" />
-            <span className="text-[0.75rem] text-zinc-600 hidden sm:block">Admin</span>
+            <span className="w-px h-4 bg-amber-900/40 hidden sm:block" />
+            <span className="text-[0.75rem] text-amber-100/25 hidden sm:block">Admin</span>
           </div>
           <div className="flex items-center gap-4">
             <button
               onClick={handleSeed}
               disabled={seeding}
               title="Заповнити порожні таблиці даними з сайту"
-              className="flex items-center gap-1.5 text-[0.75rem] text-violet-400/60 hover:text-violet-400
-                         disabled:opacity-40 transition-colors border border-violet-500/20
-                         hover:border-violet-500/40 px-3 py-1.5"
+              className="flex items-center gap-1.5 text-[0.75rem] text-[#FF6B00]/60 hover:text-[#FF6B00]
+                         disabled:opacity-40 transition-colors border border-[#FF6B00]/20
+                         hover:border-[#FF6B00]/40 px-3 py-1.5"
             >
               {seeding
                 ? <svg className="animate-spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" strokeOpacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/></svg>
@@ -264,12 +241,12 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
               }
               Seed
             </button>
-            <span className="text-[0.6875rem] text-zinc-700 tabular-nums hidden sm:block">
+            <span className="text-[0.6875rem] text-amber-100/15 tabular-nums hidden sm:block">
               {new Date().toLocaleDateString("uk-UA", { day: "2-digit", month: "long", year: "numeric", timeZone: "Europe/Kyiv" })}
             </span>
             <button
               onClick={onLogout}
-              className="flex items-center gap-1.5 text-[0.75rem] text-zinc-600 hover:text-zinc-300 transition-colors"
+              className="flex items-center gap-1.5 text-[0.75rem] text-amber-100/25 hover:text-amber-100/60 transition-colors"
             >
               <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M13 10H3m0 0l3-3m-3 3l3 3M8 6V5a2 2 0 012-2h6a2 2 0 012 2v10a2 2 0 01-2 2h-6a2 2 0 01-2-2v-1"/>
@@ -281,7 +258,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       </header>
 
       {/* ── Tab nav ── */}
-      <div className="bg-[#07060A] border-b border-violet-900/25 shrink-0 overflow-x-auto">
+      <div className="bg-[#0e0b08] border-b border-amber-900/25 shrink-0 overflow-x-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex min-w-max">
             {TABS.map((t) => (
@@ -290,8 +267,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                 onClick={() => setTab(t.id)}
                 className={`px-5 py-3.5 text-[0.8125rem] font-semibold border-b-2 transition-colors whitespace-nowrap ${
                   tab === t.id
-                    ? "border-violet-500 text-violet-400"
-                    : "border-transparent text-zinc-500 hover:text-zinc-300 hover:border-violet-900/50"
+                    ? "border-[#FF6B00] text-[#FF6B00]"
+                    : "border-transparent text-amber-100/28 hover:text-amber-100/60 hover:border-amber-900/50"
                 }`}
               >
                 {t.label}
@@ -361,15 +338,15 @@ function LeadsTab() {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {[
-          { label: "Всього",    value: total,                                                cls: "text-white"         },
-          { label: "Нові",      value: leads.filter(l => l.status === "new").length,         cls: "text-violet-400"    },
-          { label: "В обробці", value: leads.filter(l => l.status === "in_progress").length, cls: "text-blue-400"      },
-          { label: "Виконано",  value: leads.filter(l => l.status === "done").length,         cls: "text-emerald-400"   },
+          { label: "Всього",    value: total,                                               cls: "text-white"        },
+          { label: "Нові",      value: leads.filter(l => l.status === "new").length,        cls: "text-amber-400"    },
+          { label: "В обробці", value: leads.filter(l => l.status === "in_progress").length, cls: "text-blue-400"     },
+          { label: "Виконано",  value: leads.filter(l => l.status === "done").length,        cls: "text-[#FF6B00]"    },
         ].map((s) => (
           <div key={s.label}
-               className="bg-[#1a1412] border border-amber-900/25 px-5 py-4 hover:border-violet-500/30 transition-colors">
+               className="bg-[#1a1412] border border-amber-900/25 px-5 py-4 hover:border-[#FF6B00]/30 transition-colors">
             <div className={`text-[2rem] font-black leading-none mb-1.5 ${s.cls}`}>{s.value}</div>
-            <div className="text-[0.6875rem] text-zinc-600 uppercase tracking-[0.1em]">{s.label}</div>
+            <div className="text-[0.6875rem] text-amber-100/25 uppercase tracking-[0.1em]">{s.label}</div>
           </div>
         ))}
       </div>
@@ -381,81 +358,72 @@ function LeadsTab() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-[#07060A] border-b border-violet-900/25">
+                <tr className="bg-[#0e0b08] border-b border-amber-900/25">
                   {["№", "Ім'я", "Телефон", "Сайт / Інст.", "Коментар", "Статус", "Дата", ""].map((h) => (
-                    <th key={h} className="px-4 py-3 text-left text-[0.625rem] font-bold uppercase tracking-[0.12em] text-zinc-600 whitespace-nowrap">
+                    <th key={h} className="px-4 py-3 text-left text-[0.625rem] font-bold uppercase tracking-[0.12em] text-amber-100/28 whitespace-nowrap">
                       {h}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-violet-900/15">
-                <AnimatePresence initial={false}>
-                  {leads.map((lead, idx) => {
-                    const ws = fmtWebsite(lead.website);
-                    const sc = STATUS_STYLE[lead.status];
-                    return (
-                      <motion.tr
-                        key={lead.id}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ delay: idx * 0.04, duration: 0.3, ease: "easeOut" }}
-                        className="hover:bg-[#1e1722] transition-colors duration-150"
-                      >
-                        <td className="px-4 py-3.5 text-zinc-600 tabular-nums text-xs">{total - idx}</td>
-                        <td className="px-4 py-3.5 font-semibold text-white whitespace-nowrap">{lead.name}</td>
-                        <td className="px-4 py-3.5 whitespace-nowrap">
-                          <a href={`tel:${lead.phone.replace(/\s/g,"")}`}
-                             className="text-violet-400 hover:underline font-medium">
-                            {lead.phone}
+              <tbody className="divide-y divide-amber-900/15">
+                {leads.map((lead, idx) => {
+                  const ws = fmtWebsite(lead.website);
+                  const sc = STATUS_STYLE[lead.status];
+                  return (
+                    <tr key={lead.id} className="hover:bg-[#221a14] transition-colors duration-150">
+                      <td className="px-4 py-3.5 text-amber-100/20 tabular-nums text-xs">{total - idx}</td>
+                      <td className="px-4 py-3.5 font-semibold text-white whitespace-nowrap">{lead.name}</td>
+                      <td className="px-4 py-3.5 whitespace-nowrap">
+                        <a href={`tel:${lead.phone.replace(/\s/g,"")}`}
+                           className="text-[#FF6B00] hover:underline font-medium">
+                          {lead.phone}
+                        </a>
+                      </td>
+                      <td className="px-4 py-3.5 whitespace-nowrap">
+                        {ws ? (
+                          <a href={ws.href} target="_blank" rel="noopener noreferrer"
+                             className="text-xs text-amber-100/35 hover:text-[#FF6B00] underline underline-offset-2 transition-colors">
+                            {ws.label}
                           </a>
-                        </td>
-                        <td className="px-4 py-3.5 whitespace-nowrap">
-                          {ws ? (
-                            <a href={ws.href} target="_blank" rel="noopener noreferrer"
-                               className="text-xs text-zinc-500 hover:text-violet-400 underline underline-offset-2 transition-colors">
-                              {ws.label}
-                            </a>
-                          ) : <span className="text-zinc-700 text-xs">—</span>}
-                        </td>
-                        <td className="px-4 py-3.5 text-zinc-500 max-w-[220px]">
-                          <span className="line-clamp-2 text-xs leading-snug">
-                            {lead.comment ?? <span className="text-zinc-700">—</span>}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3.5 whitespace-nowrap">
-                          <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 border text-xs font-medium ${sc.bg} ${sc.text} ${sc.border}`}>
-                            <span className={`w-1.5 h-1.5 shrink-0 ${sc.dot}`} />
-                            <select
-                              value={lead.status}
-                              onChange={(e) => updateStatus(lead.id, e.target.value as LeadStatus)}
-                              className={`bg-transparent cursor-pointer focus:outline-none ${sc.text}`}
-                            >
-                              {STATUS_OPTIONS.map((o) => (
-                                <option key={o.value} value={o.value} className="bg-[#1a1412] text-white">
-                                  {o.label}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3.5 text-zinc-600 whitespace-nowrap tabular-nums text-xs">{fmtDate(lead.created_at)}</td>
-                        <td className="px-4 py-3.5">
-                          <button onClick={() => remove(lead.id, lead.name)}
-                                  className="text-zinc-600 hover:text-red-400 transition-colors" title="Видалити">
-                            <TrashIcon />
-                          </button>
-                        </td>
-                      </motion.tr>
-                    );
-                  })}
-                </AnimatePresence>
+                        ) : <span className="text-amber-100/12 text-xs">—</span>}
+                      </td>
+                      <td className="px-4 py-3.5 text-amber-100/35 max-w-[220px]">
+                        <span className="line-clamp-2 text-xs leading-snug">
+                          {lead.comment ?? <span className="text-amber-100/12">—</span>}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3.5 whitespace-nowrap">
+                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 border text-xs font-medium ${sc.bg} ${sc.text} ${sc.border}`}>
+                          <span className={`w-1.5 h-1.5 shrink-0 ${sc.dot}`} />
+                          <select
+                            value={lead.status}
+                            onChange={(e) => updateStatus(lead.id, e.target.value as LeadStatus)}
+                            className={`bg-transparent cursor-pointer focus:outline-none ${sc.text}`}
+                          >
+                            {STATUS_OPTIONS.map((o) => (
+                              <option key={o.value} value={o.value} className="bg-[#1a1412] text-white">
+                                {o.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3.5 text-amber-100/20 whitespace-nowrap tabular-nums text-xs">{fmtDate(lead.created_at)}</td>
+                      <td className="px-4 py-3.5">
+                        <button onClick={() => remove(lead.id, lead.name)}
+                                className="text-amber-100/20 hover:text-red-400 transition-colors" title="Видалити">
+                          <TrashIcon />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
-          <div className="px-4 py-3 border-t border-violet-900/15 bg-[#07060A] text-xs text-zinc-600">
-            Записів: <strong className="text-zinc-400">{total}</strong>
+          <div className="px-4 py-3 border-t border-amber-900/15 bg-[#0e0b08] text-xs text-amber-100/25">
+            Записів: <strong className="text-amber-100/50">{total}</strong>
           </div>
         </div>
       )}
@@ -468,13 +436,12 @@ function LeadsTab() {
 const EMPTY_CASE = {
   title: "", description: "", client_niche: "",
   location: "", project_type: "", highlight: "",
-  stats_text: "", mockup_type: "landing", accent_color: "#7c3aed",
+  stats_text: "", mockup_type: "landing", accent_color: "#FF6B00",
   image_url: "", project_link: "",
 };
 type CaseForm = typeof EMPTY_CASE;
 
 const MOCKUP_TYPE_OPTIONS = ["landing", "shop", "corporate", "catalog", "crm"] as const;
-void MOCKUP_TYPE_OPTIONS;
 
 function CasesTab() {
   const [items, setItems]     = useState<CaseRow[]>([]);
@@ -504,7 +471,7 @@ function CasesTab() {
       highlight:    c.highlight     ?? "",
       stats_text:   c.stats_text    ?? "",
       mockup_type:  c.mockup_type   ?? "landing",
-      accent_color: c.accent_color  ?? "#7c3aed",
+      accent_color: c.accent_color  ?? "#FF6B00",
       image_url:    c.image_url     ?? "",
       project_link: c.project_link  ?? "",
     });
@@ -523,7 +490,7 @@ function CasesTab() {
         highlight:    form.highlight.trim()    || null,
         stats_text:   form.stats_text.trim()   || null,
         mockup_type:  form.mockup_type         || "landing",
-        accent_color: form.accent_color        || "#7c3aed",
+        accent_color: form.accent_color        || "#FF6B00",
         image_url:    form.image_url.trim()    || null,
         project_link: form.project_link.trim() || null,
       };
@@ -555,7 +522,7 @@ function CasesTab() {
 
   const FIELDS: {
     key: keyof CaseForm; label: string; placeholder: string;
-    required?: boolean; textarea?: boolean;
+    required?: boolean; textarea?: boolean; select?: string[];
   }[] = [
     { key: "title",        label: "Назва клієнта",   placeholder: "KitchenBox",                        required: true },
     { key: "client_niche", label: "Ніша",            placeholder: "Кухні на замовлення"                               },
@@ -564,7 +531,7 @@ function CasesTab() {
     { key: "highlight",    label: "Ключова метрика", placeholder: "6.3% конверсія"                                    },
     { key: "description",  label: "Опис",            placeholder: "Результати, ключові цифри...",       textarea: true },
     { key: "stats_text",   label: "Статистика (3 рядки: значення|підпис)", placeholder: "6.3%|конверсія лідів\n7 дн.|до запуску\n$1.1|ціна ліда", textarea: true },
-    { key: "accent_color", label: "Акцентний колір", placeholder: "#7c3aed"                                            },
+    { key: "accent_color", label: "Акцентний колір", placeholder: "#FF6B00"                                            },
     { key: "project_link", label: "Посилання",       placeholder: "https://kitchenbox.ua"                              },
   ];
 
@@ -583,22 +550,22 @@ function CasesTab() {
           {items.map((c) => (
             <div key={c.id}
                  className="bg-[#1a1412] border border-amber-900/25 flex flex-col overflow-hidden
-                            hover:border-violet-500/35 transition-colors duration-200">
+                            hover:border-[#FF6B00]/35 transition-colors duration-200">
               {c.image_url
-                ? <div className="h-36 bg-[#07060A] shrink-0">
+                ? <div className="h-36 bg-[#0e0b08] shrink-0">
                     <img src={c.image_url} alt={c.title} className="w-full h-full object-cover" />
                   </div>
-                : <div className="h-[3px] shrink-0" style={{ background: c.accent_color ?? "#7c3aed" }} />
+                : <div className="h-[3px] shrink-0" style={{ background: c.accent_color ?? "#FF6B00" }} />
               }
               <div className="p-4 flex flex-col flex-1 gap-1.5">
                 <div className="flex items-center gap-2 flex-wrap">
                   {c.client_niche && (
-                    <span className="text-[0.625rem] text-violet-400/70 uppercase tracking-widest font-bold">
+                    <span className="text-[0.625rem] text-[#FF6B00]/70 uppercase tracking-widest font-bold">
                       {c.client_niche}
                     </span>
                   )}
                   {c.project_type && (
-                    <span className="text-[0.625rem] text-zinc-600 border border-violet-900/25 px-1.5 py-0.5">
+                    <span className="text-[0.625rem] text-amber-100/30 border border-amber-900/30 px-1.5 py-0.5">
                       {c.project_type}
                     </span>
                   )}
@@ -606,21 +573,21 @@ function CasesTab() {
                 <h3 className="font-black text-white text-[0.9375rem] leading-snug uppercase tracking-tight">
                   {c.title}
                 </h3>
-                {c.location && <p className="text-[0.6875rem] text-zinc-600">{c.location}</p>}
+                {c.location && <p className="text-[0.6875rem] text-amber-100/30">{c.location}</p>}
                 {c.highlight && (
-                  <p className="text-[0.8125rem] font-bold" style={{ color: c.accent_color ?? "#7c3aed" }}>
+                  <p className="text-[0.8125rem] font-bold" style={{ color: c.accent_color ?? "#FF6B00" }}>
                     {c.highlight}
                   </p>
                 )}
                 {c.description && (
-                  <p className="text-xs text-zinc-500 line-clamp-2 flex-1 leading-relaxed">{c.description}</p>
+                  <p className="text-xs text-amber-100/35 line-clamp-2 flex-1 leading-relaxed">{c.description}</p>
                 )}
                 {c.mockup_type && (
-                  <span className="text-[0.625rem] text-zinc-700">мокап: {c.mockup_type}</span>
+                  <span className="text-[0.625rem] text-amber-100/18">мокап: {c.mockup_type}</span>
                 )}
                 {c.project_link && (
                   <a href={c.project_link} target="_blank" rel="noopener noreferrer"
-                     className="text-[0.6875rem] text-violet-400/60 hover:text-violet-400 transition-colors">
+                     className="text-[0.6875rem] text-[#FF6B00]/60 hover:text-[#FF6B00] transition-colors">
                     {c.project_link.replace(/^https?:\/\/(www\.)?/, "")}
                   </a>
                 )}
@@ -629,13 +596,13 @@ function CasesTab() {
                 <button
                   onClick={() => openEdit(c)}
                   className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs
-                             text-zinc-600 hover:text-white hover:bg-[#221a14] transition-colors border-r border-amber-900/20"
+                             text-amber-100/30 hover:text-white hover:bg-[#221a14] transition-colors border-r border-amber-900/20"
                 >
                   <EditIcon /> Редагувати
                 </button>
                 <button
                   onClick={() => handleDelete(c.id, c.title)}
-                  className="px-4 flex items-center justify-center text-zinc-700 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                  className="px-4 flex items-center justify-center text-amber-100/20 hover:text-red-400 hover:bg-red-500/10 transition-colors"
                 >
                   <TrashIcon />
                 </button>
@@ -645,33 +612,33 @@ function CasesTab() {
         </div>
       )}
 
-      <AnimatePresence>
-        {modal.open && (
-          <GenericModal
-            heading={modal.editing ? "Редагувати кейс" : "Новий кейс"}
-            onClose={() => setModal({ open: false, editing: null })}
-            onSubmit={handleSave}
-            saving={saving}
-            disabled={!form.title.trim()}
-          >
-            <ImageUploadField
-              value={form.image_url}
-              onChange={(url) => setForm((p) => ({ ...p, image_url: url }))}
+      {modal.open && (
+        <GenericModal
+          heading={modal.editing ? "Редагувати кейс" : "Новий кейс"}
+          onClose={() => setModal({ open: false, editing: null })}
+          onSubmit={handleSave}
+          saving={saving}
+          disabled={!form.title.trim()}
+        >
+          {/* Image upload — always first */}
+          <ImageUploadField
+            value={form.image_url}
+            onChange={(url) => setForm((p) => ({ ...p, image_url: url }))}
+          />
+
+          {FIELDS.map((f) => (
+            <ModalField key={f.key} label={f.label} required={f.required}
+              input={
+                f.textarea
+                  ? <textarea value={form[f.key]} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))}
+                              placeholder={f.placeholder} rows={f.key === "stats_text" ? 4 : 3} className={TA_CLS} />
+                  : <input type="text" value={form[f.key]} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))}
+                           placeholder={f.placeholder} required={f.required} className={IN_CLS} />
+              }
             />
-            {FIELDS.map((f) => (
-              <ModalField key={f.key} label={f.label} required={f.required}
-                input={
-                  f.textarea
-                    ? <textarea value={form[f.key]} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))}
-                                placeholder={f.placeholder} rows={f.key === "stats_text" ? 4 : 3} className={TA_CLS} />
-                    : <input type="text" value={form[f.key]} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))}
-                             placeholder={f.placeholder} required={f.required} className={IN_CLS} />
-                }
-              />
-            ))}
-          </GenericModal>
-        )}
-      </AnimatePresence>
+          ))}
+        </GenericModal>
+      )}
     </div>
   );
 }
@@ -770,40 +737,40 @@ function ServicesTab() {
           {items.map((s, idx) => (
             <div key={s.id}
                  className="bg-[#1a1412] border border-amber-900/25 p-5 flex items-start gap-5
-                            hover:border-violet-500/35 transition-colors duration-200">
-              <div className="w-8 h-8 bg-violet-500/10 border border-violet-500/25 flex items-center justify-center text-[0.625rem] font-black text-violet-400 shrink-0">
+                            hover:border-[#FF6B00]/35 transition-colors duration-200">
+              <div className="w-8 h-8 bg-[#FF6B00]/12 border border-[#FF6B00]/25 flex items-center justify-center text-[0.625rem] font-black text-[#FF6B00] shrink-0">
                 {String(idx + 1).padStart(2, "0")}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-3 mb-1">
                   <h3 className="font-black text-white uppercase tracking-tight">{s.title}</h3>
-                  <span className="text-violet-400 font-bold text-sm shrink-0">від ${s.price_from}</span>
+                  <span className="text-[#FF6B00] font-bold text-sm shrink-0">від ${s.price_from}</span>
                 </div>
-                {s.duration && <span className="text-xs text-zinc-600 mr-3">{s.duration}</span>}
-                <span className="text-xs text-zinc-700">icon: {s.icon_key} · порядок: {s.sort_order}</span>
+                {s.duration && <span className="text-xs text-amber-100/30 mr-3">{s.duration}</span>}
+                <span className="text-xs text-amber-100/18">icon: {s.icon_key} · порядок: {s.sort_order}</span>
                 {s.description && (
-                  <p className="text-sm text-zinc-500 mt-1.5 line-clamp-2 leading-relaxed">{s.description}</p>
+                  <p className="text-sm text-amber-100/35 mt-1.5 line-clamp-2 leading-relaxed">{s.description}</p>
                 )}
                 {s.features.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-2">
                     {s.features.slice(0, 3).map((f) => (
-                      <span key={f} className="text-[0.625rem] bg-violet-900/15 border border-violet-900/25 px-2 py-0.5 text-zinc-500">
+                      <span key={f} className="text-[0.625rem] bg-amber-900/15 border border-amber-900/25 px-2 py-0.5 text-amber-100/35">
                         {f}
                       </span>
                     ))}
                     {s.features.length > 3 && (
-                      <span className="text-[0.625rem] text-zinc-700">+{s.features.length - 3} ще</span>
+                      <span className="text-[0.625rem] text-amber-100/20">+{s.features.length - 3} ще</span>
                     )}
                   </div>
                 )}
               </div>
               <div className="flex gap-2 shrink-0">
                 <button onClick={() => openEdit(s)}
-                        className="p-2 text-zinc-600 hover:text-white hover:bg-[#221a14] transition-colors border border-amber-900/25">
+                        className="p-2 text-amber-100/25 hover:text-white hover:bg-[#221a14] transition-colors border border-amber-900/25">
                   <EditIcon />
                 </button>
                 <button onClick={() => handleDelete(s.id, s.title)}
-                        className="p-2 text-zinc-700 hover:text-red-400 hover:bg-red-500/10 transition-colors border border-amber-900/25">
+                        className="p-2 text-amber-100/20 hover:text-red-400 hover:bg-red-500/10 transition-colors border border-amber-900/25">
                   <TrashIcon />
                 </button>
               </div>
@@ -812,49 +779,47 @@ function ServicesTab() {
         </div>
       )}
 
-      <AnimatePresence>
-        {modal.open && (
-          <GenericModal
-            heading={modal.editing ? "Редагувати послугу" : "Нова послуга"}
-            onClose={() => setModal({ open: false, editing: null })}
-            onSubmit={handleSave}
-            saving={saving}
-            disabled={!form.title.trim()}
-          >
-            <ModalField label="Назва" required input={
-              <input type="text" value={form.title} onChange={e => setF("title", e.target.value)}
-                     placeholder="Лендінги для лідогенерації" required className={IN_CLS} />
+      {modal.open && (
+        <GenericModal
+          heading={modal.editing ? "Редагувати послугу" : "Нова послуга"}
+          onClose={() => setModal({ open: false, editing: null })}
+          onSubmit={handleSave}
+          saving={saving}
+          disabled={!form.title.trim()}
+        >
+          <ModalField label="Назва" required input={
+            <input type="text" value={form.title} onChange={e => setF("title", e.target.value)}
+                   placeholder="Лендінги для лідогенерації" required className={IN_CLS} />
+          } />
+          <div className="grid grid-cols-2 gap-3">
+            <ModalField label="Ціна від ($)" input={
+              <input type="number" value={form.price_from} onChange={e => setF("price_from", e.target.value)}
+                     placeholder="200" className={IN_CLS} />
             } />
-            <div className="grid grid-cols-2 gap-3">
-              <ModalField label="Ціна від ($)" input={
-                <input type="number" value={form.price_from} onChange={e => setF("price_from", e.target.value)}
-                       placeholder="200" className={IN_CLS} />
-              } />
-              <ModalField label="Термін" input={
-                <input type="text" value={form.duration} onChange={e => setF("duration", e.target.value)}
-                       placeholder="7 днів" className={IN_CLS} />
-              } />
-            </div>
-            <ModalField label="Іконка" input={
-              <select value={form.icon_key} onChange={e => setF("icon_key", e.target.value)} className={IN_CLS}>
-                {ICON_KEYS.map(k => <option key={k} value={k} className="bg-[#1a1412] text-white">{k}</option>)}
-              </select>
+            <ModalField label="Термін" input={
+              <input type="text" value={form.duration} onChange={e => setF("duration", e.target.value)}
+                     placeholder="7 днів" className={IN_CLS} />
             } />
-            <ModalField label="Опис" input={
-              <textarea value={form.description} onChange={e => setF("description", e.target.value)}
-                        placeholder="Короткий опис послуги..." rows={3} className={TA_CLS} />
-            } />
-            <ModalField label="Переваги (кожна з нового рядка)" input={
-              <textarea value={form.features} onChange={e => setF("features", e.target.value)}
-                        placeholder={"Розробка під конкретний оффер\nPageSpeed 95+"} rows={4} className={TA_CLS} />
-            } />
-            <ModalField label="Порядок (sort)" input={
-              <input type="number" value={form.sort_order} onChange={e => setF("sort_order", e.target.value)}
-                     placeholder="0" className={IN_CLS} />
-            } />
-          </GenericModal>
-        )}
-      </AnimatePresence>
+          </div>
+          <ModalField label="Іконка" input={
+            <select value={form.icon_key} onChange={e => setF("icon_key", e.target.value)} className={IN_CLS}>
+              {ICON_KEYS.map(k => <option key={k} value={k} className="bg-[#1a1412] text-white">{k}</option>)}
+            </select>
+          } />
+          <ModalField label="Опис" input={
+            <textarea value={form.description} onChange={e => setF("description", e.target.value)}
+                      placeholder="Короткий опис послуги..." rows={3} className={TA_CLS} />
+          } />
+          <ModalField label="Переваги (кожна з нового рядка)" input={
+            <textarea value={form.features} onChange={e => setF("features", e.target.value)}
+                      placeholder={"Розробка під конкретний оффер\nPageSpeed 95+"} rows={4} className={TA_CLS} />
+          } />
+          <ModalField label="Порядок (sort)" input={
+            <input type="number" value={form.sort_order} onChange={e => setF("sort_order", e.target.value)}
+                   placeholder="0" className={IN_CLS} />
+          } />
+        </GenericModal>
+      )}
     </div>
   );
 }
@@ -980,28 +945,28 @@ function CalculatorTab() {
           <div className="bg-[#1a1412] border border-amber-900/25 overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-[#07060A] border-b border-violet-900/25">
+                <tr className="bg-[#0e0b08] border-b border-amber-900/25">
                   {["Назва", "Ціна", "Термін", "Порядок", ""].map(h => (
-                    <th key={h} className="px-4 py-3 text-left text-[0.625rem] font-bold uppercase tracking-[0.12em] text-zinc-600">{h}</th>
+                    <th key={h} className="px-4 py-3 text-left text-[0.625rem] font-bold uppercase tracking-[0.12em] text-amber-100/28">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-violet-900/15">
+              <tbody className="divide-y divide-amber-900/15">
                 {types.map((t) => (
-                  <tr key={t.id} className="hover:bg-[#1e1722] transition-colors duration-150">
+                  <tr key={t.id} className="hover:bg-[#221a14] transition-colors duration-150">
                     <td className="px-4 py-3.5">
                       <div className="font-semibold text-white">{t.label}</div>
-                      {t.description && <div className="text-xs text-zinc-600 line-clamp-1 mt-0.5">{t.description}</div>}
+                      {t.description && <div className="text-xs text-amber-100/30 line-clamp-1 mt-0.5">{t.description}</div>}
                     </td>
-                    <td className="px-4 py-3.5 font-bold text-violet-400 whitespace-nowrap">${t.base_price}</td>
-                    <td className="px-4 py-3.5 text-zinc-500 whitespace-nowrap">{t.duration ?? "—"}</td>
-                    <td className="px-4 py-3.5 text-zinc-700 tabular-nums text-xs">{t.sort_order}</td>
+                    <td className="px-4 py-3.5 font-bold text-[#FF6B00] whitespace-nowrap">${t.base_price}</td>
+                    <td className="px-4 py-3.5 text-amber-100/40 whitespace-nowrap">{t.duration ?? "—"}</td>
+                    <td className="px-4 py-3.5 text-amber-100/20 tabular-nums text-xs">{t.sort_order}</td>
                     <td className="px-4 py-3.5">
                       <div className="flex gap-2">
                         <button onClick={() => { setTypeForm({ label: t.label, description: t.description ?? "", base_price: String(t.base_price), duration: t.duration ?? "", sort_order: String(t.sort_order) }); setTypeModal({ open: true, editing: t }); }}
-                                className="p-1.5 text-zinc-600 hover:text-white hover:bg-[#221a14] transition-colors border border-amber-900/25"><EditIcon /></button>
+                                className="p-1.5 text-amber-100/25 hover:text-white hover:bg-[#221a14] transition-colors border border-amber-900/25"><EditIcon /></button>
                         <button onClick={() => deleteType(t.id, t.label)}
-                                className="p-1.5 text-zinc-700 hover:text-red-400 hover:bg-red-500/10 transition-colors border border-amber-900/25"><TrashIcon /></button>
+                                className="p-1.5 text-amber-100/20 hover:text-red-400 hover:bg-red-500/10 transition-colors border border-amber-900/25"><TrashIcon /></button>
                       </div>
                     </td>
                   </tr>
@@ -1024,24 +989,24 @@ function CalculatorTab() {
           <div className="bg-[#1a1412] border border-amber-900/25 overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-[#07060A] border-b border-violet-900/25">
+                <tr className="bg-[#0e0b08] border-b border-amber-900/25">
                   {["Назва", "Ціна", "Порядок", ""].map(h => (
-                    <th key={h} className="px-4 py-3 text-left text-[0.625rem] font-bold uppercase tracking-[0.12em] text-zinc-600">{h}</th>
+                    <th key={h} className="px-4 py-3 text-left text-[0.625rem] font-bold uppercase tracking-[0.12em] text-amber-100/28">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-violet-900/15">
+              <tbody className="divide-y divide-amber-900/15">
                 {addons.map((a) => (
-                  <tr key={a.id} className="hover:bg-[#1e1722] transition-colors duration-150">
+                  <tr key={a.id} className="hover:bg-[#221a14] transition-colors duration-150">
                     <td className="px-4 py-3.5 font-semibold text-white">{a.label}</td>
-                    <td className="px-4 py-3.5 font-bold text-violet-400 whitespace-nowrap">+${a.price}</td>
-                    <td className="px-4 py-3.5 text-zinc-700 tabular-nums text-xs">{a.sort_order}</td>
+                    <td className="px-4 py-3.5 font-bold text-[#FF6B00] whitespace-nowrap">+${a.price}</td>
+                    <td className="px-4 py-3.5 text-amber-100/20 tabular-nums text-xs">{a.sort_order}</td>
                     <td className="px-4 py-3.5">
                       <div className="flex gap-2">
                         <button onClick={() => { setAddonForm({ label: a.label, price: String(a.price), sort_order: String(a.sort_order) }); setAddonModal({ open: true, editing: a }); }}
-                                className="p-1.5 text-zinc-600 hover:text-white hover:bg-[#221a14] transition-colors border border-amber-900/25"><EditIcon /></button>
+                                className="p-1.5 text-amber-100/25 hover:text-white hover:bg-[#221a14] transition-colors border border-amber-900/25"><EditIcon /></button>
                         <button onClick={() => deleteAddon(a.id, a.label)}
-                                className="p-1.5 text-zinc-700 hover:text-red-400 hover:bg-red-500/10 transition-colors border border-amber-900/25"><TrashIcon /></button>
+                                className="p-1.5 text-amber-100/20 hover:text-red-400 hover:bg-red-500/10 transition-colors border border-amber-900/25"><TrashIcon /></button>
                       </div>
                     </td>
                   </tr>
@@ -1052,31 +1017,27 @@ function CalculatorTab() {
         )}
       </section>
 
-      <AnimatePresence>
-        {typeModal.open && (
-          <GenericModal heading={typeModal.editing ? "Редагувати тип" : "Новий тип проекту"} onClose={() => setTypeModal({ open: false, editing: null })} onSubmit={saveType} saving={saving} disabled={!typeForm.label.trim()}>
-            <ModalField label="Назва" required input={<input type="text" value={typeForm.label} onChange={e => setTypeForm(p => ({ ...p, label: e.target.value }))} placeholder="Лендінг" required className={IN_CLS} />} />
-            <div className="grid grid-cols-2 gap-3">
-              <ModalField label="Базова ціна ($)" input={<input type="number" value={typeForm.base_price} onChange={e => setTypeForm(p => ({ ...p, base_price: e.target.value }))} placeholder="200" className={IN_CLS} />} />
-              <ModalField label="Термін" input={<input type="text" value={typeForm.duration} onChange={e => setTypeForm(p => ({ ...p, duration: e.target.value }))} placeholder="7 днів" className={IN_CLS} />} />
-            </div>
-            <ModalField label="Опис" input={<textarea value={typeForm.description} onChange={e => setTypeForm(p => ({ ...p, description: e.target.value }))} placeholder="Короткий опис..." rows={2} className={TA_CLS} />} />
-            <ModalField label="Порядок (sort)" input={<input type="number" value={typeForm.sort_order} onChange={e => setTypeForm(p => ({ ...p, sort_order: e.target.value }))} placeholder="0" className={IN_CLS} />} />
-          </GenericModal>
-        )}
-      </AnimatePresence>
+      {typeModal.open && (
+        <GenericModal heading={typeModal.editing ? "Редагувати тип" : "Новий тип проекту"} onClose={() => setTypeModal({ open: false, editing: null })} onSubmit={saveType} saving={saving} disabled={!typeForm.label.trim()}>
+          <ModalField label="Назва" required input={<input type="text" value={typeForm.label} onChange={e => setTypeForm(p => ({ ...p, label: e.target.value }))} placeholder="Лендінг" required className={IN_CLS} />} />
+          <div className="grid grid-cols-2 gap-3">
+            <ModalField label="Базова ціна ($)" input={<input type="number" value={typeForm.base_price} onChange={e => setTypeForm(p => ({ ...p, base_price: e.target.value }))} placeholder="200" className={IN_CLS} />} />
+            <ModalField label="Термін" input={<input type="text" value={typeForm.duration} onChange={e => setTypeForm(p => ({ ...p, duration: e.target.value }))} placeholder="7 днів" className={IN_CLS} />} />
+          </div>
+          <ModalField label="Опис" input={<textarea value={typeForm.description} onChange={e => setTypeForm(p => ({ ...p, description: e.target.value }))} placeholder="Короткий опис..." rows={2} className={TA_CLS} />} />
+          <ModalField label="Порядок (sort)" input={<input type="number" value={typeForm.sort_order} onChange={e => setTypeForm(p => ({ ...p, sort_order: e.target.value }))} placeholder="0" className={IN_CLS} />} />
+        </GenericModal>
+      )}
 
-      <AnimatePresence>
-        {addonModal.open && (
-          <GenericModal heading={addonModal.editing ? "Редагувати опцію" : "Нова опція"} onClose={() => setAddonModal({ open: false, editing: null })} onSubmit={saveAddon} saving={saving} disabled={!addonForm.label.trim()}>
-            <ModalField label="Назва опції" required input={<input type="text" value={addonForm.label} onChange={e => setAddonForm(p => ({ ...p, label: e.target.value }))} placeholder="SEO оптимізація" required className={IN_CLS} />} />
-            <div className="grid grid-cols-2 gap-3">
-              <ModalField label="Ціна ($)" input={<input type="number" value={addonForm.price} onChange={e => setAddonForm(p => ({ ...p, price: e.target.value }))} placeholder="80" className={IN_CLS} />} />
-              <ModalField label="Порядок (sort)" input={<input type="number" value={addonForm.sort_order} onChange={e => setAddonForm(p => ({ ...p, sort_order: e.target.value }))} placeholder="0" className={IN_CLS} />} />
-            </div>
-          </GenericModal>
-        )}
-      </AnimatePresence>
+      {addonModal.open && (
+        <GenericModal heading={addonModal.editing ? "Редагувати опцію" : "Нова опція"} onClose={() => setAddonModal({ open: false, editing: null })} onSubmit={saveAddon} saving={saving} disabled={!addonForm.label.trim()}>
+          <ModalField label="Назва опції" required input={<input type="text" value={addonForm.label} onChange={e => setAddonForm(p => ({ ...p, label: e.target.value }))} placeholder="SEO оптимізація" required className={IN_CLS} />} />
+          <div className="grid grid-cols-2 gap-3">
+            <ModalField label="Ціна ($)" input={<input type="number" value={addonForm.price} onChange={e => setAddonForm(p => ({ ...p, price: e.target.value }))} placeholder="80" className={IN_CLS} />} />
+            <ModalField label="Порядок (sort)" input={<input type="number" value={addonForm.sort_order} onChange={e => setAddonForm(p => ({ ...p, sort_order: e.target.value }))} placeholder="0" className={IN_CLS} />} />
+          </div>
+        </GenericModal>
+      )}
     </div>
   );
 }
@@ -1158,21 +1119,21 @@ function FaqTab() {
           {items.map((item, idx) => (
             <div key={item.id}
                  className="bg-[#1a1412] border border-amber-900/25 p-5
-                            hover:border-violet-500/35 transition-colors duration-200">
+                            hover:border-[#FF6B00]/35 transition-colors duration-200">
               <div className="flex items-start gap-4">
-                <span className="w-7 h-7 bg-violet-500/10 border border-violet-500/25 flex items-center justify-center text-[0.625rem] font-black text-violet-400 shrink-0 mt-0.5">
+                <span className="w-7 h-7 bg-[#FF6B00]/12 border border-[#FF6B00]/25 flex items-center justify-center text-[0.625rem] font-black text-[#FF6B00] shrink-0 mt-0.5">
                   {String(idx + 1).padStart(2, "0")}
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-white mb-1.5">{item.question}</p>
-                  <p className="text-sm text-zinc-500 line-clamp-2 leading-relaxed">{item.answer}</p>
-                  <span className="text-[0.625rem] text-zinc-700 mt-1 block">порядок: {item.sort_order}</span>
+                  <p className="text-sm text-amber-100/35 line-clamp-2 leading-relaxed">{item.answer}</p>
+                  <span className="text-[0.625rem] text-amber-100/18 mt-1 block">порядок: {item.sort_order}</span>
                 </div>
                 <div className="flex gap-2 shrink-0">
                   <button onClick={() => openEdit(item)}
-                          className="p-2 text-zinc-600 hover:text-white hover:bg-[#221a14] transition-colors border border-amber-900/25"><EditIcon /></button>
+                          className="p-2 text-amber-100/25 hover:text-white hover:bg-[#221a14] transition-colors border border-amber-900/25"><EditIcon /></button>
                   <button onClick={() => handleDelete(item.id, item.question)}
-                          className="p-2 text-zinc-700 hover:text-red-400 hover:bg-red-500/10 transition-colors border border-amber-900/25"><TrashIcon /></button>
+                          className="p-2 text-amber-100/20 hover:text-red-400 hover:bg-red-500/10 transition-colors border border-amber-900/25"><TrashIcon /></button>
                 </div>
               </div>
             </div>
@@ -1180,30 +1141,28 @@ function FaqTab() {
         </div>
       )}
 
-      <AnimatePresence>
-        {modal.open && (
-          <GenericModal
-            heading={modal.editing ? "Редагувати питання" : "Нове питання"}
-            onClose={() => setModal({ open: false, editing: null })}
-            onSubmit={handleSave}
-            saving={saving}
-            disabled={!form.question.trim() || !form.answer.trim()}
-          >
-            <ModalField label="Питання" required input={
-              <textarea value={form.question} onChange={e => setForm(p => ({ ...p, question: e.target.value }))}
-                        placeholder="Чому такі ціни на лендінг від $200?" rows={2} required className={TA_CLS} />
-            } />
-            <ModalField label="Відповідь" required input={
-              <textarea value={form.answer} onChange={e => setForm(p => ({ ...p, answer: e.target.value }))}
-                        placeholder="Ми спеціалізуємось виключно..." rows={5} required className={TA_CLS} />
-            } />
-            <ModalField label="Порядок (sort)" input={
-              <input type="number" value={form.sort_order} onChange={e => setForm(p => ({ ...p, sort_order: e.target.value }))}
-                     placeholder="0" className={IN_CLS} />
-            } />
-          </GenericModal>
-        )}
-      </AnimatePresence>
+      {modal.open && (
+        <GenericModal
+          heading={modal.editing ? "Редагувати питання" : "Нове питання"}
+          onClose={() => setModal({ open: false, editing: null })}
+          onSubmit={handleSave}
+          saving={saving}
+          disabled={!form.question.trim() || !form.answer.trim()}
+        >
+          <ModalField label="Питання" required input={
+            <textarea value={form.question} onChange={e => setForm(p => ({ ...p, question: e.target.value }))}
+                      placeholder="Чому такі ціни на лендінг від $200?" rows={2} required className={TA_CLS} />
+          } />
+          <ModalField label="Відповідь" required input={
+            <textarea value={form.answer} onChange={e => setForm(p => ({ ...p, answer: e.target.value }))}
+                      placeholder="Ми спеціалізуємось виключно..." rows={5} required className={TA_CLS} />
+          } />
+          <ModalField label="Порядок (sort)" input={
+            <input type="number" value={form.sort_order} onChange={e => setForm(p => ({ ...p, sort_order: e.target.value }))}
+                   placeholder="0" className={IN_CLS} />
+          } />
+        </GenericModal>
+      )}
     </div>
   );
 }
@@ -1211,8 +1170,8 @@ function FaqTab() {
 // ─── Shared UI primitives ─────────────────────────────────────────────────────
 
 const IN_CLS =
-  "w-full border border-violet-900/30 bg-violet-900/[0.08] px-3 py-2.5 text-sm text-white " +
-  "placeholder-zinc-600 focus:outline-none focus:border-violet-500/50 transition-colors";
+  "w-full border border-amber-900/30 bg-amber-900/10 px-3 py-2.5 text-sm text-white " +
+  "placeholder-amber-100/20 focus:outline-none focus:border-[#FF6B00]/50 transition-colors";
 const TA_CLS = `${IN_CLS} resize-none`;
 
 function PageHeader({ title, sub, action }: { title: string; sub?: string; action?: React.ReactNode }) {
@@ -1220,7 +1179,7 @@ function PageHeader({ title, sub, action }: { title: string; sub?: string; actio
     <div className="flex items-start justify-between gap-4 mb-6">
       <div>
         <h1 className="text-xl font-black text-white uppercase tracking-tight">{title}</h1>
-        {sub && <p className="text-sm text-zinc-600 mt-0.5">{sub}</p>}
+        {sub && <p className="text-sm text-amber-100/28 mt-0.5">{sub}</p>}
       </div>
       {action}
     </div>
@@ -1229,21 +1188,17 @@ function PageHeader({ title, sub, action }: { title: string; sub?: string; actio
 
 function AddBtn({ label, onClick }: { label: string; onClick: () => void }) {
   return (
-    <motion.button
+    <button
       onClick={onClick}
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white
-                 text-sm font-black px-4 py-2.5 uppercase tracking-[0.06em] shrink-0
-                 shadow-[0_0_14px_rgba(124,58,237,0.22)] hover:shadow-[0_0_24px_rgba(124,58,237,0.42)]
-                 transition-shadow duration-200"
+      className="flex items-center gap-2 bg-[#FF6B00] text-black text-sm font-black
+                 px-4 py-2.5 uppercase tracking-[0.06em] hover:bg-[#e55f00] transition-colors
+                 active:scale-[0.97] shrink-0"
     >
       <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
         <path d="M10 4v12M4 10h12"/>
       </svg>
       {label}
-    </motion.button>
+    </button>
   );
 }
 
@@ -1251,8 +1206,8 @@ function RefreshBtn({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-1.5 text-sm text-zinc-500 border border-violet-900/25
-                 px-3 py-2 hover:bg-violet-900/10 hover:text-zinc-300 hover:border-violet-500/30 transition-colors"
+      className="flex items-center gap-1.5 text-sm text-amber-100/35 border border-amber-900/30
+                 px-3 py-2 hover:bg-[#221a14] hover:text-amber-100/70 hover:border-amber-900/50 transition-colors"
     >
       <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 4v5h5"/><path d="M16 16v-5h-5"/><path d="M17.5 8.5A7.5 7.5 0 104.5 15"/>
@@ -1265,7 +1220,7 @@ function RefreshBtn({ onClick }: { onClick: () => void }) {
 function Spinner() {
   return (
     <div className="flex items-center justify-center py-24">
-      <div className="w-6 h-6 border-2 border-violet-900/25 border-t-violet-500 rounded-full animate-spin" />
+      <div className="w-6 h-6 border-2 border-amber-900/25 border-t-[#FF6B00] rounded-full animate-spin" />
     </div>
   );
 }
@@ -1274,7 +1229,7 @@ function ErrorBox({ msg, onRetry }: { msg: string; onRetry: () => void }) {
   return (
     <div className="bg-[#1a1412] border border-red-500/20 flex flex-col items-center justify-center py-16 text-center">
       <p className="text-red-400 font-medium mb-2">Помилка: {msg}</p>
-      <button onClick={onRetry} className="text-sm text-zinc-500 hover:text-white underline transition-colors">
+      <button onClick={onRetry} className="text-sm text-amber-100/35 hover:text-white underline transition-colors">
         Спробувати ще раз
       </button>
     </div>
@@ -1283,9 +1238,9 @@ function ErrorBox({ msg, onRetry }: { msg: string; onRetry: () => void }) {
 
 function EmptyBox({ title, sub, children }: { title: string; sub: string; children?: React.ReactNode }) {
   return (
-    <div className="bg-[#1a1412] border border-violet-900/20 border-dashed flex flex-col items-center justify-center py-16 text-center">
-      <p className="font-bold text-zinc-500 mb-1">{title}</p>
-      <p className="text-sm text-zinc-600 max-w-xs leading-relaxed">{sub}</p>
+    <div className="bg-[#1a1412] border border-amber-900/25 border-dashed flex flex-col items-center justify-center py-16 text-center">
+      <p className="font-bold text-amber-100/40 mb-1">{title}</p>
+      <p className="text-sm text-amber-100/22 max-w-xs leading-relaxed">{sub}</p>
       {children}
     </div>
   );
@@ -1300,23 +1255,13 @@ function GenericModal({
 }) {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.96, y: 12 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.96, y: 12 }}
-        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        className="bg-[#140F1A] border border-violet-900/40 w-full max-w-lg shadow-2xl
-                   shadow-violet-900/20 flex flex-col max-h-[90vh]"
-      >
-        {/* Violet hairline */}
-        <div className="h-px bg-gradient-to-r from-violet-500/60 via-violet-500/25 to-transparent" />
-
-        <div className="flex items-center justify-between px-6 py-4 border-b border-violet-900/25 shrink-0">
+      <div className="bg-[#1a1412] border border-amber-900/35 w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-amber-900/25 shrink-0">
           <h2 className="font-black text-white uppercase tracking-tight">{heading}</h2>
-          <button onClick={onClose} className="text-zinc-600 hover:text-white transition-colors" aria-label="Закрити">
+          <button onClick={onClose} className="text-amber-100/25 hover:text-white transition-colors" aria-label="Закрити">
             <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
               <path d="M4 4l12 12M16 4L4 16"/>
             </svg>
@@ -1324,29 +1269,21 @@ function GenericModal({
         </div>
         <form onSubmit={onSubmit} className="flex flex-col flex-1 overflow-hidden">
           <div className="px-6 py-5 space-y-4 overflow-y-auto flex-1">{children}</div>
-          <div className="px-6 py-4 border-t border-violet-900/25 flex gap-3 shrink-0">
+          <div className="px-6 py-4 border-t border-amber-900/25 flex gap-3 shrink-0">
             <button type="button" onClick={onClose}
-                    className="flex-1 py-2.5 border border-violet-900/30 text-sm text-zinc-500
-                               hover:bg-violet-900/10 hover:text-zinc-300 transition-colors">
+                    className="flex-1 py-2.5 border border-amber-900/30 text-sm text-amber-100/40
+                               hover:bg-amber-900/15 hover:text-amber-100/70 transition-colors">
               Скасувати
             </button>
-            <motion.button
-              type="submit"
-              disabled={saving || disabled}
-              whileHover={!saving && !disabled ? { scale: 1.02 } : {}}
-              whileTap={!saving && !disabled ? { scale: 0.98 } : {}}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="flex-1 py-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white
-                         text-sm font-black uppercase tracking-[0.06em]
-                         disabled:opacity-40 disabled:cursor-not-allowed
-                         shadow-[0_0_14px_rgba(124,58,237,0.20)] hover:shadow-[0_0_24px_rgba(124,58,237,0.40)]
-                         transition-shadow duration-200"
-            >
+            <button type="submit" disabled={saving || disabled}
+                    className="flex-1 py-2.5 bg-[#FF6B00] text-black text-sm font-black uppercase
+                               tracking-[0.06em] hover:bg-[#e55f00] disabled:opacity-40
+                               disabled:cursor-not-allowed transition-colors">
               {saving ? "Збереження..." : "Зберегти"}
-            </motion.button>
+            </button>
           </div>
         </form>
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -1354,7 +1291,7 @@ function GenericModal({
 function ModalField({ label, required, input }: { label: string; required?: boolean; input: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-[0.6875rem] font-bold text-zinc-500 uppercase tracking-[0.1em] mb-1.5">
+      <label className="block text-[0.6875rem] font-bold text-amber-100/35 uppercase tracking-[0.1em] mb-1.5">
         {label}{required && <span className="text-red-400 ml-0.5">*</span>}
       </label>
       {input}
@@ -1391,12 +1328,13 @@ function ImageUploadField({ value, onChange }: { value: string; onChange: (url: 
 
   return (
     <div>
-      <label className="block text-[0.6875rem] font-bold text-zinc-500 uppercase tracking-[0.1em] mb-1.5">
+      <label className="block text-[0.6875rem] font-bold text-amber-100/35 uppercase tracking-[0.1em] mb-1.5">
         Фото кейсу
       </label>
 
+      {/* Preview */}
       {value && (
-        <div className="relative mb-2.5 h-36 bg-[#07060A] border border-violet-900/25 overflow-hidden">
+        <div className="relative mb-2.5 h-36 bg-[#0e0b08] border border-amber-900/30 overflow-hidden group/img">
           <img src={value} alt="" className="w-full h-full object-cover" />
           <button
             type="button"
@@ -1411,14 +1349,15 @@ function ImageUploadField({ value, onChange }: { value: string; onChange: (url: 
         </div>
       )}
 
+      {/* Upload button + URL fallback */}
       <div className="flex gap-2">
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
-          className="flex items-center gap-1.5 px-3 py-2.5 border border-violet-900/30
-                     bg-violet-900/[0.08] text-[0.8125rem] text-zinc-500
-                     hover:text-white hover:border-violet-500/40 hover:bg-violet-900/15
+          className="flex items-center gap-1.5 px-3 py-2.5 border border-amber-900/30
+                     bg-amber-900/10 text-[0.8125rem] text-amber-100/50
+                     hover:text-white hover:border-amber-500/40 hover:bg-amber-900/20
                      transition-colors disabled:opacity-40 disabled:cursor-wait whitespace-nowrap shrink-0"
         >
           {uploading ? (
@@ -1447,6 +1386,7 @@ function ImageUploadField({ value, onChange }: { value: string; onChange: (url: 
         />
       </div>
 
+      {/* Hidden file input — all image formats */}
       <input
         ref={inputRef}
         type="file"
@@ -1455,7 +1395,7 @@ function ImageUploadField({ value, onChange }: { value: string; onChange: (url: 
         onChange={handleFile}
       />
 
-      <p className="mt-1.5 text-[0.625rem] text-zinc-700">
+      <p className="mt-1.5 text-[0.625rem] text-amber-100/20">
         JPG, PNG, WebP, GIF, AVIF, SVG, HEIC, BMP · до 10 МБ
       </p>
 
@@ -1468,8 +1408,6 @@ function ImageUploadField({ value, onChange }: { value: string; onChange: (url: 
     </div>
   );
 }
-
-// ─── Icons ────────────────────────────────────────────────────────────────────
 
 function EditIcon() {
   return (
