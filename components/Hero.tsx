@@ -126,7 +126,7 @@ export default function Hero({ onOpenModal }: { onOpenModal: () => void }) {
             >
               <span className="w-8 h-[2px] bg-gradient-to-r from-amber-500 to-orange-600 flex-shrink-0" />
               <span className="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-amber-400">
-                СТЕЙК./ — веб-студія для меблевого та ремонтного бізнесу
+                СТЕК./ — веб-студія для меблевого та ремонтного бізнесу
               </span>
             </motion.div>
 

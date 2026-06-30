@@ -119,7 +119,7 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
       />
       <div className="relative w-full max-w-sm">
         <div className="flex items-baseline gap-[2px] justify-center mb-10 select-none">
-          <span className="font-mono text-[1.25rem] font-black tracking-[0.08em] uppercase text-white">СТЕЙК</span>
+          <span className="font-mono text-[1.25rem] font-black tracking-[0.08em] uppercase text-white">СТЕК</span>
           <span className="font-mono text-sm text-[#FF6B00]/60">.<span className="animate-slash">/</span></span>
         </div>
         <p className="text-center text-[0.6875rem] text-amber-100/25 tracking-[0.18em] uppercase mb-8">
@@ -174,7 +174,7 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
           </button>
         </form>
         <p className="mt-10 text-center text-[0.625rem] text-amber-100/12">
-          © {new Date().getFullYear()} СТЕЙК./
+          © {new Date().getFullYear()} СТЕК./
         </p>
       </div>
     </div>
@@ -220,7 +220,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="flex items-baseline gap-[2px] select-none">
-              <span className="font-mono text-[0.9375rem] font-black tracking-[0.08em] uppercase text-white">СТЕЙК</span>
+              <span className="font-mono text-[0.9375rem] font-black tracking-[0.08em] uppercase text-white">СТЕК</span>
               <span className="font-mono text-[0.8125rem] text-[#FF6B00]/50">.<span className="animate-slash">/</span></span>
             </span>
             <span className="w-px h-4 bg-amber-900/40 hidden sm:block" />

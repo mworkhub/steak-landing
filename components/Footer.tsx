@@ -20,7 +20,7 @@ export default function Footer() {
               className="leading-none select-none flex items-baseline gap-[1px]"
             >
               <span className="font-mono text-[1.0625rem] font-bold tracking-[0.08em] uppercase text-white">
-                СТЕЙК
+                СТЕК
               </span>
               <span className="font-mono text-[0.9375rem] text-[#FF6B00]/55 ml-[1px]">.<span className="animate-slash">/</span></span>
             </a>
@@ -122,7 +122,7 @@ export default function Footer() {
         {/* ── Bottom bar ───────────────────────────────── */}
         <div className="pt-7 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-[0.75rem] text-white/18">
-            © {year}&nbsp;СТЕЙК./ — Всі системи працюють
+            © {year}&nbsp;СТЕК./ — Всі системи працюють
           </p>
           <a
             href="#"

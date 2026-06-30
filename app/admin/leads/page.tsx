@@ -39,7 +39,7 @@ export default async function AdminLeadsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <a href="/admin" className="leading-none select-none flex items-baseline gap-[1px]">
-              <span className="font-mono text-[0.9375rem] font-black tracking-[0.08em] uppercase text-white">СТЕЙК</span>
+              <span className="font-mono text-[0.9375rem] font-black tracking-[0.08em] uppercase text-white">СТЕК</span>
               <span className="font-mono text-[0.8125rem] text-[#FF6B00]/50">./</span>
             </a>
             <span className="w-px h-4 bg-amber-900/40 hidden sm:block" />
