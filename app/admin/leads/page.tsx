@@ -26,32 +26,39 @@ async function getLeads(): Promise<Lead[]> {
 export default async function AdminLeadsPage() {
   const leads = await getLeads();
 
-  const total       = leads.length;
-  const newCount    = leads.filter((l) => l.status === "new").length;
-  const inProgress  = leads.filter((l) => l.status === "in_progress").length;
-  const doneCount   = leads.filter((l) => l.status === "done").length;
+  const total      = leads.length;
+  const newCount   = leads.filter((l) => l.status === "new").length;
+  const inProgress = leads.filter((l) => l.status === "in_progress").length;
+  const doneCount  = leads.filter((l) => l.status === "done").length;
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5] font-sans">
+    <div className="min-h-screen bg-[#120E0B] font-sans">
 
       {/* ── Header ── */}
-      <header className="bg-ink-800 border-b border-white/[0.06]">
+      <header className="bg-[#0e0b08] border-b border-amber-900/25">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="leading-none select-none flex items-baseline gap-[1px]">
-              <span className="font-mono text-[0.9375rem] font-bold tracking-[0.08em] uppercase text-white">
-                STEAK
-              </span>
-              <span className="font-mono text-[0.8125rem] text-gold/55">./</span>
-            </span>
-            <span className="w-px h-4 bg-white/10 hidden sm:block" />
-            <span className="text-[0.8125rem] text-white/35 hidden sm:block">Leads CRM</span>
+            <a href="/admin" className="leading-none select-none flex items-baseline gap-[1px]">
+              <span className="font-mono text-[0.9375rem] font-black tracking-[0.08em] uppercase text-white">СТЕЙК</span>
+              <span className="font-mono text-[0.8125rem] text-[#FF6B00]/50">./</span>
+            </a>
+            <span className="w-px h-4 bg-amber-900/40 hidden sm:block" />
+            <span className="text-[0.75rem] text-amber-100/25 hidden sm:block">Leads CRM</span>
           </div>
-          <span className="text-[0.75rem] text-white/20 tabular-nums">
-            {new Date().toLocaleDateString("uk-UA", {
-              day: "2-digit", month: "long", year: "numeric", timeZone: "Europe/Kyiv",
-            })}
-          </span>
+          <div className="flex items-center gap-4">
+            <span className="text-[0.6875rem] text-amber-100/15 tabular-nums hidden sm:block">
+              {new Date().toLocaleDateString("uk-UA", {
+                day: "2-digit", month: "long", year: "numeric", timeZone: "Europe/Kyiv",
+              })}
+            </span>
+            <a
+              href="/admin"
+              className="flex items-center gap-1.5 text-[0.75rem] text-amber-100/30
+                         hover:text-amber-100/70 transition-colors"
+            >
+              ← Адмін панель
+            </a>
+          </div>
         </div>
       </header>
 
@@ -59,51 +66,70 @@ export default async function AdminLeadsPage() {
 
         {/* ── Title ── */}
         <div className="mb-8">
-          <h1 className="font-serif text-2xl font-bold text-ink-800 mb-1">
+          <span className="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-[#FF6B00] block mb-2">
+            Leads CRM
+          </span>
+          <h1 className="font-black text-[1.75rem] uppercase tracking-tight text-white">
             Заявки з лендінгу
           </h1>
-          <p className="text-[0.875rem] text-ink-300">
+          <p className="text-[0.8125rem] text-amber-100/25 mt-1">
             Сортуються від нових до старих · оновлюється при кожному завантаженні
           </p>
         </div>
 
         {/* ── Stats ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-          <StatCard label="Всього"    value={total}      />
-          <StatCard label="Нові"      value={newCount}    accent="gold"    />
-          <StatCard label="В обробці" value={inProgress}  accent="blue"    />
-          <StatCard label="Виконано"  value={doneCount}   accent="green"   />
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+          {[
+            { label: "Всього",    value: total,      cls: "text-white"     },
+            { label: "Нові",      value: newCount,   cls: "text-amber-400" },
+            { label: "В обробці", value: inProgress, cls: "text-blue-400"  },
+            { label: "Виконано",  value: doneCount,  cls: "text-[#FF6B00]" },
+          ].map((s) => (
+            <div key={s.label}
+                 className="bg-[#1a1412] border border-amber-900/25 px-5 py-4
+                            hover:border-[#FF6B00]/30 transition-colors">
+              <div className={`text-[2rem] font-black leading-none mb-1.5 ${s.cls}`}>{s.value}</div>
+              <div className="text-[0.6875rem] text-amber-100/25 uppercase tracking-[0.1em]">{s.label}</div>
+            </div>
+          ))}
         </div>
 
         {/* ── Table or Empty ── */}
         {leads.length === 0 ? (
-          <EmptyState />
+          <div className="bg-[#1a1412] border border-amber-900/25 flex flex-col items-center justify-center py-20 text-center">
+            <div className="w-14 h-14 border border-amber-900/30 flex items-center justify-center mb-5 text-amber-100/15">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <path d="M3 10h18M8 4v6M16 4v6" />
+              </svg>
+            </div>
+            <p className="text-[1.0625rem] font-black uppercase tracking-tight text-white mb-2">
+              Заявок ще немає
+            </p>
+            <p className="text-[0.8125rem] text-amber-100/30 max-w-xs leading-relaxed">
+              З'являться тут одразу після першого сабміту форми на лендінгу.
+            </p>
+            <p className="mt-4 text-[0.6875rem] text-amber-100/15">
+              Перевірте SQL-міграцію в Supabase Dashboard → SQL Editor
+            </p>
+          </div>
         ) : (
-          <div className="bg-white border border-ink-100 overflow-hidden shadow-sm">
+          <div className="bg-[#1a1412] border border-amber-900/25 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-ink-800 text-left">
-                    {[
-                      { label: "№",          w: "w-10"  },
-                      { label: "Ім'я",       w: ""      },
-                      { label: "Телефон",    w: ""      },
-                      { label: "Сайт / Інст.", w: ""    },
-                      { label: "Коментар",   w: "w-64"  },
-                      { label: "Статус",     w: ""      },
-                      { label: "Дата",       w: ""      },
-                    ].map(({ label, w }) => (
-                      <th
-                        key={label}
-                        className={`px-4 py-3 text-[0.6875rem] font-semibold uppercase
-                                    tracking-[0.1em] text-white/45 whitespace-nowrap ${w}`}
-                      >
-                        {label}
+                  <tr className="bg-[#0e0b08] border-b border-amber-900/25">
+                    {["№", "Ім'я", "Телефон", "Сайт / Інст.", "Коментар", "Статус", "Дата"].map((h) => (
+                      <th key={h}
+                          className="px-4 py-3 text-left text-[0.625rem] font-bold uppercase
+                                     tracking-[0.12em] text-amber-100/28 whitespace-nowrap">
+                        {h}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-ink-50">
+                <tbody className="divide-y divide-amber-900/15">
                   {leads.map((lead, index) => (
                     <LeadRow key={lead.id} lead={lead} index={total - index} />
                   ))}
@@ -111,13 +137,13 @@ export default async function AdminLeadsPage() {
               </table>
             </div>
 
-            <div className="px-4 py-3 border-t border-ink-50 flex items-center justify-between bg-ink-50/40">
-              <span className="text-[0.75rem] text-ink-300">
-                Записів: <strong className="text-ink-600">{total}</strong>
+            <div className="px-4 py-3 border-t border-amber-900/20 flex items-center justify-between">
+              <span className="text-[0.75rem] text-amber-100/25">
+                Записів: <strong className="text-amber-400 font-black">{total}</strong>
               </span>
               <a
                 href="/admin/leads"
-                className="text-[0.75rem] text-gold hover:text-gold-dark transition-colors"
+                className="text-[0.75rem] text-[#FF6B00]/60 hover:text-[#FF6B00] transition-colors"
               >
                 Оновити ↻
               </a>
@@ -138,16 +164,11 @@ function LeadRow({ lead, index }: { lead: Lead; index: number }) {
     timeZone: "Europe/Kyiv",
   });
 
-  // Determine if website looks like an Instagram handle or URL
   const websiteDisplay = (() => {
     if (!lead.website) return null;
     const w = lead.website.trim();
     if (w.startsWith("@")) {
-      return {
-        href: `https://instagram.com/${w.slice(1)}`,
-        label: w,
-        icon: "ig",
-      };
+      return { href: `https://instagram.com/${w.slice(1)}`, label: w, icon: "ig" };
     }
     try {
       const url = new URL(w.startsWith("http") ? w : `https://${w}`);
@@ -158,34 +179,28 @@ function LeadRow({ lead, index }: { lead: Lead; index: number }) {
   })();
 
   return (
-    <tr className="hover:bg-cream-light/60 transition-colors duration-100">
-      {/* № */}
-      <td className="px-4 py-3.5 text-ink-300 tabular-nums text-xs">{index}</td>
+    <tr className="hover:bg-[#221a14] transition-colors duration-150">
+      <td className="px-4 py-3.5 text-amber-100/20 tabular-nums text-xs">{index}</td>
 
-      {/* Name */}
-      <td className="px-4 py-3.5 font-semibold text-ink-700 whitespace-nowrap">
-        {lead.name}
-      </td>
+      <td className="px-4 py-3.5 font-semibold text-white whitespace-nowrap">{lead.name}</td>
 
-      {/* Phone */}
       <td className="px-4 py-3.5 whitespace-nowrap">
         <a
           href={`tel:${lead.phone.replace(/\s/g, "")}`}
-          className="text-gold hover:text-gold-dark transition-colors underline underline-offset-2 font-medium"
+          className="text-[#FF6B00] hover:underline font-medium"
         >
           {lead.phone}
         </a>
       </td>
 
-      {/* Website / Instagram */}
       <td className="px-4 py-3.5 whitespace-nowrap">
         {websiteDisplay ? (
           <a
             href={websiteDisplay.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-[0.8125rem] text-ink-500
-                       hover:text-gold transition-colors underline underline-offset-2"
+            className="inline-flex items-center gap-1.5 text-[0.8125rem] text-amber-100/45
+                       hover:text-amber-400 transition-colors underline underline-offset-2"
           >
             {websiteDisplay.icon === "ig" ? (
               <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden>
@@ -202,24 +217,21 @@ function LeadRow({ lead, index }: { lead: Lead; index: number }) {
             {websiteDisplay.label}
           </a>
         ) : (
-          <span className="text-ink-200 text-xs">—</span>
+          <span className="text-amber-100/15 text-xs">—</span>
         )}
       </td>
 
-      {/* Comment */}
-      <td className="px-4 py-3.5 text-ink-400 max-w-[260px]">
+      <td className="px-4 py-3.5 text-amber-100/40 max-w-[260px]">
         <span className="line-clamp-2 text-[0.8125rem] leading-snug">
-          {lead.comment || <span className="text-ink-200">—</span>}
+          {lead.comment || <span className="text-amber-100/15">—</span>}
         </span>
       </td>
 
-      {/* Status */}
       <td className="px-4 py-3.5 whitespace-nowrap">
         <StatusBadge status={lead.status} />
       </td>
 
-      {/* Date */}
-      <td className="px-4 py-3.5 text-ink-300 whitespace-nowrap tabular-nums text-xs">
+      <td className="px-4 py-3.5 text-amber-100/25 whitespace-nowrap tabular-nums text-xs">
         {date}
       </td>
     </tr>
@@ -228,68 +240,19 @@ function LeadRow({ lead, index }: { lead: Lead; index: number }) {
 
 // ─── StatusBadge ───────────────────────────────────────────────────────────
 
-const STATUS_CONFIG: Record<LeadStatus, { label: string; cls: string; dot: string }> = {
-  new:         { label: "Новий",    cls: "bg-amber-50 text-amber-700 border border-amber-200",   dot: "bg-amber-400"   },
-  in_progress: { label: "В обробці", cls: "bg-blue-50 text-blue-700 border border-blue-200",     dot: "bg-blue-400"    },
-  done:        { label: "Виконано", cls: "bg-emerald-50 text-emerald-700 border border-emerald-200", dot: "bg-emerald-400" },
+const STATUS_CONFIG: Record<LeadStatus, { label: string; bg: string; text: string; border: string; dot: string }> = {
+  new:         { label: "Новий",     bg: "bg-amber-900/20",  text: "text-amber-400",  border: "border-amber-500/30",  dot: "bg-amber-400"   },
+  in_progress: { label: "В обробці", bg: "bg-blue-900/20",   text: "text-blue-400",   border: "border-blue-500/30",   dot: "bg-blue-400"    },
+  done:        { label: "Виконано",  bg: "bg-orange-900/20", text: "text-orange-400", border: "border-orange-500/30", dot: "bg-[#FF6B00]"   },
 };
 
 function StatusBadge({ status }: { status: LeadStatus }) {
   const cfg = STATUS_CONFIG[status] ?? STATUS_CONFIG.new;
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full ${cfg.cls}`}>
-      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${cfg.dot}`} />
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[0.6875rem] font-bold
+                      border ${cfg.bg} ${cfg.text} ${cfg.border}`}>
+      <span className={`w-1.5 h-1.5 shrink-0 ${cfg.dot}`} />
       {cfg.label}
     </span>
-  );
-}
-
-// ─── StatCard ──────────────────────────────────────────────────────────────
-
-function StatCard({
-  label,
-  value,
-  accent,
-}: {
-  label: string;
-  value: number;
-  accent?: "gold" | "blue" | "green";
-}) {
-  const colorMap: Record<string, string> = {
-    gold:  "text-gold",
-    blue:  "text-blue-600",
-    green: "text-emerald-600",
-  };
-  const color = accent ? (colorMap[accent] ?? "text-ink-800") : "text-ink-800";
-
-  return (
-    <div className="bg-white border border-ink-100 px-5 py-4 shadow-sm">
-      <div className={`font-serif text-[2rem] font-bold leading-none mb-1.5 ${color}`}>
-        {value}
-      </div>
-      <div className="text-[0.6875rem] text-ink-300 uppercase tracking-[0.1em]">{label}</div>
-    </div>
-  );
-}
-
-// ─── EmptyState ────────────────────────────────────────────────────────────
-
-function EmptyState() {
-  return (
-    <div className="bg-white border border-ink-100 flex flex-col items-center justify-center py-20 text-center shadow-sm">
-      <div className="w-14 h-14 border border-ink-100 flex items-center justify-center mb-5 text-ink-200">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <rect x="3" y="4" width="18" height="18" rx="2" />
-          <path d="M3 10h18M8 4v6M16 4v6" />
-        </svg>
-      </div>
-      <p className="font-serif text-lg font-semibold text-ink-600 mb-2">Заявок ще немає</p>
-      <p className="text-sm text-ink-300 max-w-xs leading-relaxed">
-        Якщо таблиця щойно створена — заявки з'являться тут одразу після першого сабміту форми.
-      </p>
-      <p className="mt-4 text-xs text-ink-200">
-        Перевірте що SQL-міграція виконана в Supabase Dashboard → SQL Editor
-      </p>
-    </div>
   );
 }

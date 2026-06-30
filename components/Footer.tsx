@@ -20,9 +20,9 @@ export default function Footer() {
               className="leading-none select-none flex items-baseline gap-[1px]"
             >
               <span className="font-mono text-[1.0625rem] font-bold tracking-[0.08em] uppercase text-white">
-                STEAK
+                СТЕЙК
               </span>
-              <span className="font-mono text-[0.9375rem] text-gold/55 ml-[1px]">./</span>
+              <span className="font-mono text-[0.9375rem] text-[#FF6B00]/55 ml-[1px]">.<span className="animate-slash">/</span></span>
             </a>
 
             <p className="mt-4 text-[0.875rem] text-white/32 leading-relaxed max-w-[240px]">
@@ -122,7 +122,7 @@ export default function Footer() {
         {/* ── Bottom bar ───────────────────────────────── */}
         <div className="pt-7 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-[0.75rem] text-white/18">
-            © {year}&nbsp;STEAK./ — Всі системи працюють
+            © {year}&nbsp;СТЕЙК./ — Всі системи працюють
           </p>
           <a
             href="#"

@@ -54,9 +54,9 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
               className="leading-none select-none flex items-baseline gap-[1px]"
             >
               <span className="font-mono text-[1.0625rem] font-bold tracking-[0.08em] uppercase text-white">
-                STEAK
+                СТЕЙК
               </span>
-              <span className="font-mono text-[0.9375rem] text-gold/55 ml-[1px]">./</span>
+              <span className="font-mono text-[0.9375rem] text-[#FF6B00]/55 ml-[1px]">.<span className="animate-slash">/</span></span>
             </a>
 
             {/* Desktop nav */}

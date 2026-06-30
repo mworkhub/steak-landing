@@ -203,6 +203,16 @@
 .animate-fade-in    { animation: fadeInUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
 .animate-fade-up    { animation: fadeInUp 0.7s cubic-bezier(0.16,1,0.3,1) both; }
 
+/* Slash walk animation for logo */
+@keyframes slashWalk {
+  0%, 100% { transform: translateY(0px);   opacity: 0.5; }
+  50%       { transform: translateY(-4px);  opacity: 0.85; }
+}
+.animate-slash {
+  display: inline-block;
+  animation: slashWalk 2.2s ease-in-out infinite;
+}
+
 /* Orange shimmer text */
 .text-shimmer {
   background: linear-gradient(
