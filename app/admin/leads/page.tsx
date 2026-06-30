@@ -32,29 +32,28 @@ export default async function AdminLeadsPage() {
   const doneCount  = leads.filter((l) => l.status === "done").length;
 
   return (
-    <div className="min-h-screen bg-[#120E0B] font-sans">
+    <div className="min-h-screen bg-[#0B090A] font-sans">
 
       {/* ── Header ── */}
-      <header className="bg-[#0e0b08] border-b border-amber-900/25">
+      <header className="bg-[#07060A] border-b border-violet-900/25">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <a href="/admin" className="leading-none select-none flex items-baseline gap-[1px]">
               <span className="font-mono text-[0.9375rem] font-black tracking-[0.08em] uppercase text-white">СТЕЙК</span>
-              <span className="font-mono text-[0.8125rem] text-[#FF6B00]/50">./</span>
+              <span className="font-mono text-[0.8125rem] text-violet-400/50">./</span>
             </a>
-            <span className="w-px h-4 bg-amber-900/40 hidden sm:block" />
-            <span className="text-[0.75rem] text-amber-100/25 hidden sm:block">Leads CRM</span>
+            <span className="w-px h-4 bg-violet-900/40 hidden sm:block" />
+            <span className="text-[0.75rem] text-zinc-600 hidden sm:block">Leads CRM</span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-[0.6875rem] text-amber-100/15 tabular-nums hidden sm:block">
+            <span className="text-[0.6875rem] text-zinc-700 tabular-nums hidden sm:block">
               {new Date().toLocaleDateString("uk-UA", {
                 day: "2-digit", month: "long", year: "numeric", timeZone: "Europe/Kyiv",
               })}
             </span>
             <a
               href="/admin"
-              className="flex items-center gap-1.5 text-[0.75rem] text-amber-100/30
-                         hover:text-amber-100/70 transition-colors"
+              className="flex items-center gap-1.5 text-[0.75rem] text-zinc-500 hover:text-zinc-300 transition-colors"
             >
               ← Адмін панель
             </a>
@@ -66,13 +65,13 @@ export default async function AdminLeadsPage() {
 
         {/* ── Title ── */}
         <div className="mb-8">
-          <span className="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-[#FF6B00] block mb-2">
+          <span className="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-violet-400 block mb-2">
             Leads CRM
           </span>
           <h1 className="font-black text-[1.75rem] uppercase tracking-tight text-white">
             Заявки з лендінгу
           </h1>
-          <p className="text-[0.8125rem] text-amber-100/25 mt-1">
+          <p className="text-[0.8125rem] text-zinc-600 mt-1">
             Сортуються від нових до старих · оновлюється при кожному завантаженні
           </p>
         </div>
@@ -80,24 +79,24 @@ export default async function AdminLeadsPage() {
         {/* ── Stats ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
           {[
-            { label: "Всього",    value: total,      cls: "text-white"     },
-            { label: "Нові",      value: newCount,   cls: "text-amber-400" },
-            { label: "В обробці", value: inProgress, cls: "text-blue-400"  },
-            { label: "Виконано",  value: doneCount,  cls: "text-[#FF6B00]" },
+            { label: "Всього",    value: total,      cls: "text-white"        },
+            { label: "Нові",      value: newCount,   cls: "text-violet-400"   },
+            { label: "В обробці", value: inProgress, cls: "text-blue-400"     },
+            { label: "Виконано",  value: doneCount,  cls: "text-emerald-400"  },
           ].map((s) => (
             <div key={s.label}
                  className="bg-[#1a1412] border border-amber-900/25 px-5 py-4
-                            hover:border-[#FF6B00]/30 transition-colors">
+                            hover:border-violet-500/30 transition-colors">
               <div className={`text-[2rem] font-black leading-none mb-1.5 ${s.cls}`}>{s.value}</div>
-              <div className="text-[0.6875rem] text-amber-100/25 uppercase tracking-[0.1em]">{s.label}</div>
+              <div className="text-[0.6875rem] text-zinc-600 uppercase tracking-[0.1em]">{s.label}</div>
             </div>
           ))}
         </div>
 
         {/* ── Table or Empty ── */}
         {leads.length === 0 ? (
-          <div className="bg-[#1a1412] border border-amber-900/25 flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-14 h-14 border border-amber-900/30 flex items-center justify-center mb-5 text-amber-100/15">
+          <div className="bg-[#1a1412] border border-violet-900/20 flex flex-col items-center justify-center py-20 text-center">
+            <div className="w-14 h-14 border border-violet-900/30 flex items-center justify-center mb-5 text-zinc-700">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                    strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <rect x="3" y="4" width="18" height="18" rx="2" />
@@ -107,10 +106,10 @@ export default async function AdminLeadsPage() {
             <p className="text-[1.0625rem] font-black uppercase tracking-tight text-white mb-2">
               Заявок ще немає
             </p>
-            <p className="text-[0.8125rem] text-amber-100/30 max-w-xs leading-relaxed">
+            <p className="text-[0.8125rem] text-zinc-500 max-w-xs leading-relaxed">
               З'являться тут одразу після першого сабміту форми на лендінгу.
             </p>
-            <p className="mt-4 text-[0.6875rem] text-amber-100/15">
+            <p className="mt-4 text-[0.6875rem] text-zinc-700">
               Перевірте SQL-міграцію в Supabase Dashboard → SQL Editor
             </p>
           </div>
@@ -119,17 +118,17 @@ export default async function AdminLeadsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-[#0e0b08] border-b border-amber-900/25">
+                  <tr className="bg-[#07060A] border-b border-violet-900/25">
                     {["№", "Ім'я", "Телефон", "Сайт / Інст.", "Коментар", "Статус", "Дата"].map((h) => (
                       <th key={h}
                           className="px-4 py-3 text-left text-[0.625rem] font-bold uppercase
-                                     tracking-[0.12em] text-amber-100/28 whitespace-nowrap">
+                                     tracking-[0.12em] text-zinc-600 whitespace-nowrap">
                         {h}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-amber-900/15">
+                <tbody className="divide-y divide-violet-900/15">
                   {leads.map((lead, index) => (
                     <LeadRow key={lead.id} lead={lead} index={total - index} />
                   ))}
@@ -137,13 +136,13 @@ export default async function AdminLeadsPage() {
               </table>
             </div>
 
-            <div className="px-4 py-3 border-t border-amber-900/20 flex items-center justify-between">
-              <span className="text-[0.75rem] text-amber-100/25">
-                Записів: <strong className="text-amber-400 font-black">{total}</strong>
+            <div className="px-4 py-3 border-t border-violet-900/15 flex items-center justify-between bg-[#07060A]">
+              <span className="text-[0.75rem] text-zinc-600">
+                Записів: <strong className="text-zinc-400 font-black">{total}</strong>
               </span>
               <a
                 href="/admin/leads"
-                className="text-[0.75rem] text-[#FF6B00]/60 hover:text-[#FF6B00] transition-colors"
+                className="text-[0.75rem] text-violet-400/60 hover:text-violet-400 transition-colors"
               >
                 Оновити ↻
               </a>
@@ -179,15 +178,15 @@ function LeadRow({ lead, index }: { lead: Lead; index: number }) {
   })();
 
   return (
-    <tr className="hover:bg-[#221a14] transition-colors duration-150">
-      <td className="px-4 py-3.5 text-amber-100/20 tabular-nums text-xs">{index}</td>
+    <tr className="hover:bg-[#1e1722] transition-colors duration-150">
+      <td className="px-4 py-3.5 text-zinc-600 tabular-nums text-xs">{index}</td>
 
       <td className="px-4 py-3.5 font-semibold text-white whitespace-nowrap">{lead.name}</td>
 
       <td className="px-4 py-3.5 whitespace-nowrap">
         <a
           href={`tel:${lead.phone.replace(/\s/g, "")}`}
-          className="text-[#FF6B00] hover:underline font-medium"
+          className="text-violet-400 hover:underline font-medium"
         >
           {lead.phone}
         </a>
@@ -199,8 +198,8 @@ function LeadRow({ lead, index }: { lead: Lead; index: number }) {
             href={websiteDisplay.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-[0.8125rem] text-amber-100/45
-                       hover:text-amber-400 transition-colors underline underline-offset-2"
+            className="inline-flex items-center gap-1.5 text-[0.8125rem] text-zinc-500
+                       hover:text-violet-400 transition-colors underline underline-offset-2"
           >
             {websiteDisplay.icon === "ig" ? (
               <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden>
@@ -217,13 +216,13 @@ function LeadRow({ lead, index }: { lead: Lead; index: number }) {
             {websiteDisplay.label}
           </a>
         ) : (
-          <span className="text-amber-100/15 text-xs">—</span>
+          <span className="text-zinc-700 text-xs">—</span>
         )}
       </td>
 
-      <td className="px-4 py-3.5 text-amber-100/40 max-w-[260px]">
+      <td className="px-4 py-3.5 text-zinc-500 max-w-[260px]">
         <span className="line-clamp-2 text-[0.8125rem] leading-snug">
-          {lead.comment || <span className="text-amber-100/15">—</span>}
+          {lead.comment || <span className="text-zinc-700">—</span>}
         </span>
       </td>
 
@@ -231,7 +230,7 @@ function LeadRow({ lead, index }: { lead: Lead; index: number }) {
         <StatusBadge status={lead.status} />
       </td>
 
-      <td className="px-4 py-3.5 text-amber-100/25 whitespace-nowrap tabular-nums text-xs">
+      <td className="px-4 py-3.5 text-zinc-600 whitespace-nowrap tabular-nums text-xs">
         {date}
       </td>
     </tr>
@@ -241,9 +240,9 @@ function LeadRow({ lead, index }: { lead: Lead; index: number }) {
 // ─── StatusBadge ───────────────────────────────────────────────────────────
 
 const STATUS_CONFIG: Record<LeadStatus, { label: string; bg: string; text: string; border: string; dot: string }> = {
-  new:         { label: "Новий",     bg: "bg-amber-900/20",  text: "text-amber-400",  border: "border-amber-500/30",  dot: "bg-amber-400"   },
-  in_progress: { label: "В обробці", bg: "bg-blue-900/20",   text: "text-blue-400",   border: "border-blue-500/30",   dot: "bg-blue-400"    },
-  done:        { label: "Виконано",  bg: "bg-orange-900/20", text: "text-orange-400", border: "border-orange-500/30", dot: "bg-[#FF6B00]"   },
+  new:         { label: "Новий",     bg: "bg-violet-900/20",  text: "text-violet-300",  border: "border-violet-500/30",  dot: "bg-violet-400"  },
+  in_progress: { label: "В обробці", bg: "bg-blue-900/20",    text: "text-blue-300",    border: "border-blue-500/30",    dot: "bg-blue-400"    },
+  done:        { label: "Виконано",  bg: "bg-emerald-900/20", text: "text-emerald-300", border: "border-emerald-500/30", dot: "bg-emerald-400" },
 };
 
 function StatusBadge({ status }: { status: LeadStatus }) {

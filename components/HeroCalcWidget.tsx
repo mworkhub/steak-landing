@@ -27,23 +27,23 @@ export default function HeroCalcWidget() {
       <div
         aria-hidden
         className="absolute -inset-4 pointer-events-none blur-[60px] opacity-40"
-        style={{ background: "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(245,158,11,0.18) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(124,58,237,0.22) 0%, transparent 70%)" }}
       />
 
-      {/* Outer border glow */}
+      {/* Outer glow ring */}
       <div
         aria-hidden
         className="absolute -inset-px pointer-events-none"
-        style={{ boxShadow: "0 0 48px 0 rgba(245,158,11,0.10), 0 0 100px 0 rgba(245,158,11,0.05)" }}
+        style={{ boxShadow: "0 0 48px 0 rgba(124,58,237,0.12), 0 0 100px 0 rgba(99,102,241,0.06)" }}
       />
 
-      <div className="relative bg-[#1C1510]/80 backdrop-blur-xl border border-amber-900/35 p-7">
+      <div className="relative bg-[#140F1A]/85 backdrop-blur-xl border border-violet-900/35 p-7">
 
-        {/* Amber hairline */}
-        <div className="h-px bg-gradient-to-r from-amber-500/70 via-amber-500/30 to-transparent mb-6" />
+        {/* Violet hairline */}
+        <div className="h-px bg-gradient-to-r from-violet-500/70 via-violet-500/30 to-transparent mb-6" />
 
         {/* Label */}
-        <div className="text-[0.6875rem] uppercase tracking-[0.22em] text-amber-400 mb-5">
+        <div className="text-[0.6875rem] uppercase tracking-[0.22em] text-violet-400 mb-5">
           Розрахуйте вартість
         </div>
 
@@ -56,13 +56,13 @@ export default function HeroCalcWidget() {
               className={`w-full flex items-center justify-between px-3 py-2.5 border text-left
                           transition-all duration-150 ${
                 typeId === t.id
-                  ? "border-amber-500/50 bg-amber-500/[0.10] text-white"
-                  : "border-amber-900/25 text-zinc-400 hover:text-zinc-200 hover:border-amber-700/40"
+                  ? "border-violet-500/50 bg-violet-500/[0.10] text-white"
+                  : "border-amber-900/20 text-zinc-400 hover:text-zinc-200 hover:border-violet-700/40"
               }`}
             >
               <span className="text-[0.8125rem]">{t.label}</span>
               <span className={`text-[0.75rem] font-semibold tabular-nums transition-colors ${
-                typeId === t.id ? "text-amber-400" : "text-zinc-500"
+                typeId === t.id ? "text-violet-400" : "text-zinc-500"
               }`}>
                 ${t.basePrice.toLocaleString("en-US")}
               </span>
@@ -72,12 +72,12 @@ export default function HeroCalcWidget() {
 
         {/* Multiplier toggles */}
         <div className="grid grid-cols-2 gap-2 mb-6">
-          <ToggleBtn label="Express"    hint="×1.4" active={express} onChange={() => setExpress((v) => !v)} />
-          <ToggleBtn label="Кастомний"  hint="×1.5" active={custom}  onChange={() => setCustom((v) => !v)}  />
+          <ToggleBtn label="Express"   hint="×1.4" active={express} onChange={() => setExpress((v) => !v)} />
+          <ToggleBtn label="Кастомний" hint="×1.5" active={custom}  onChange={() => setCustom((v) => !v)}  />
         </div>
 
         {/* Price */}
-        <div className="border-t border-amber-900/25 pt-5 mb-5">
+        <div className="border-t border-violet-900/25 pt-5 mb-5">
           <div className="text-[0.625rem] uppercase tracking-[0.22em] text-zinc-500 mb-2">
             Орієнтовна вартість
           </div>
@@ -85,12 +85,12 @@ export default function HeroCalcWidget() {
             <span
               className={`text-[2.75rem] font-black tabular-nums tracking-tight transition-all duration-300 ${
                 express || custom
-                  ? "bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent"
+                  ? "bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent"
                   : "text-white"
               }`}
               style={
                 express || custom
-                  ? { filter: "drop-shadow(0 0 16px rgba(245,158,11,0.4))" }
+                  ? { filter: "drop-shadow(0 0 16px rgba(124,58,237,0.45))" }
                   : undefined
               }
             >
@@ -104,12 +104,12 @@ export default function HeroCalcWidget() {
         <a
           href="#calculator"
           className="flex items-center justify-center w-full
-                     bg-gradient-to-r from-amber-500 to-orange-600 text-black
+                     bg-gradient-to-r from-violet-600 to-indigo-600 text-white
                      font-black text-[0.8125rem] uppercase tracking-[0.08em]
                      px-6 py-3.5 hover:opacity-90 active:scale-[0.98]
                      transition-all duration-150
-                     shadow-[0_0_16px_rgba(245,158,11,0.30)]
-                     hover:shadow-[0_0_28px_rgba(245,158,11,0.50)]"
+                     shadow-[0_0_16px_rgba(124,58,237,0.30)]
+                     hover:shadow-[0_0_28px_rgba(124,58,237,0.55)]"
         >
           Детальний прорахунок&nbsp;↓
         </a>
@@ -132,13 +132,13 @@ function ToggleBtn({
       className={`flex items-center justify-between px-3 py-2 border text-left
                   transition-all duration-150 ${
         active
-          ? "border-amber-500/50 bg-amber-500/[0.10] text-white"
-          : "border-amber-900/25 text-zinc-400 hover:border-amber-700/40 hover:text-zinc-200"
+          ? "border-violet-500/50 bg-violet-500/[0.10] text-white"
+          : "border-amber-900/20 text-zinc-400 hover:border-violet-700/40 hover:text-zinc-200"
       }`}
     >
       <span className="text-[0.75rem]">{label}</span>
       <span className={`text-[0.6875rem] font-mono transition-colors ${
-        active ? "text-amber-400" : "text-zinc-500"
+        active ? "text-violet-400" : "text-zinc-500"
       }`}>
         {hint}
       </span>
