@@ -53,9 +53,9 @@ const STATUS_OPTIONS: { value: LeadStatus; label: string }[] = [
 ];
 
 const STATUS_STYLE: Record<LeadStatus, { bg: string; text: string; border: string; dot: string }> = {
-  new:         { bg: "bg-amber-50",   text: "text-amber-700",   border: "border-amber-200",   dot: "bg-amber-400"   },
-  in_progress: { bg: "bg-blue-50",    text: "text-blue-700",    border: "border-blue-200",    dot: "bg-blue-400"    },
-  done:        { bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200", dot: "bg-emerald-400" },
+  new:         { bg: "bg-amber-900/20",  text: "text-amber-400",  border: "border-amber-500/30",  dot: "bg-amber-400"  },
+  in_progress: { bg: "bg-blue-900/20",   text: "text-blue-400",   border: "border-blue-500/30",   dot: "bg-blue-400"   },
+  done:        { bg: "bg-[#39ff14]/10",  text: "text-[#39ff14]",  border: "border-[#39ff14]/30",  dot: "bg-[#39ff14]"  },
 };
 
 const ICON_KEYS = ["landing", "corporate", "catalog", "crm"] as const;
@@ -79,7 +79,6 @@ function fmtWebsite(w: string | null) {
   } catch { return { href: `https://${t}`, label: t }; }
 }
 
-// Generic CRUD helpers
 async function apiFetch<T>(url: string, opts?: RequestInit): Promise<T> {
   const res = await fetch(url, opts);
   if (!res.ok) {
@@ -101,8 +100,8 @@ export default function AdminPage() {
 // ─── Login ───────────────────────────────────────────────────────────────────
 
 function LoginScreen({ onLogin }: { onLogin: () => void }) {
-  const [pw, setPw]     = useState("");
-  const [show, setShow] = useState(false);
+  const [pw, setPw]       = useState("");
+  const [show, setShow]   = useState(false);
   const [shake, setShake] = useState(false);
 
   function submit(e: React.FormEvent) {
@@ -112,26 +111,48 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0C0C0C] flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4">
+      {/* Background texture */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-repeat opacity-[0.15] mix-blend-overlay pointer-events-none"
+        style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/dark-matter.png')" }}
+      />
+      <div className="relative w-full max-w-sm">
+        {/* Logo */}
         <div className="flex items-baseline gap-[2px] justify-center mb-10 select-none">
-          <span className="font-mono text-[1.125rem] font-bold tracking-[0.08em] uppercase text-white">STEAK</span>
-          <span className="font-mono text-sm text-[#C9A87C]/55">./</span>
+          <span className="font-mono text-[1.25rem] font-black tracking-[0.08em] uppercase text-white">STEAK</span>
+          <span className="font-mono text-sm text-[#39ff14]/60">./</span>
         </div>
-        <p className="text-center text-xs text-white/30 tracking-[0.1em] uppercase mb-6">Адмін панель</p>
+        <p className="text-center text-[0.6875rem] text-white/25 tracking-[0.18em] uppercase mb-8">
+          Адмін панель
+        </p>
+
         <form onSubmit={submit} className={shake ? "animate-[shake_0.5s_ease]" : ""}>
-          <div className="mb-4">
-            <label className="block text-[0.6875rem] text-white/35 tracking-[0.1em] uppercase mb-2">Пароль</label>
+          <div className="mb-5">
+            <label className="block text-[0.6875rem] text-white/30 tracking-[0.12em] uppercase mb-2.5">
+              Пароль
+            </label>
             <div className="relative">
               <input
-                type={show ? "text" : "password"} value={pw}
-                onChange={(e) => setPw(e.target.value)} autoFocus placeholder="••••••••"
-                className={`w-full bg-white/[0.04] border px-4 py-3 text-white text-sm
+                type={show ? "text" : "password"}
+                value={pw}
+                onChange={(e) => setPw(e.target.value)}
+                autoFocus
+                placeholder="••••••••"
+                className={`w-full bg-white/[0.04] border px-4 py-3.5 text-white text-sm
                             placeholder-white/15 focus:outline-none transition-colors
-                            ${shake ? "border-red-500/60" : "border-white/[0.08] focus:border-[#C9A87C]/50"}`}
+                            ${shake
+                              ? "border-red-500/60"
+                              : "border-white/[0.08] focus:border-[#39ff14]/50"
+                            }`}
               />
-              <button type="button" tabIndex={-1} onClick={() => setShow(!show)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/55 transition-colors">
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={() => setShow(!show)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/55 transition-colors"
+              >
                 <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
                   {show
                     ? <><path d="M2 10s3-6 8-6 8 6 8 6-3 6-8 6-8-6-8-6z"/><circle cx="10" cy="10" r="2.5"/><path d="M3 3l14 14"/></>
@@ -140,15 +161,24 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
                 </svg>
               </button>
             </div>
-            {shake && <p className="mt-1.5 text-[0.75rem] text-red-400">Невірний пароль</p>}
+            {shake && (
+              <p className="mt-2 text-[0.75rem] text-red-400 flex items-center gap-1.5">
+                <span className="w-1 h-1 rounded-full bg-red-400 inline-block" />
+                Невірний пароль
+              </p>
+            )}
           </div>
-          <button type="submit"
-                  className="w-full py-3 bg-[#C9A87C] text-[#0C0C0C] text-sm font-bold
-                             tracking-[0.05em] uppercase hover:bg-[#b8976b] transition-colors">
+          <button
+            type="submit"
+            className="w-full py-3.5 bg-[#39ff14] text-[#0a0a0a] text-sm font-black
+                       tracking-[0.08em] uppercase hover:bg-[#2ee610] transition-colors active:scale-[0.98]"
+          >
             Увійти
           </button>
         </form>
-        <p className="mt-8 text-center text-[0.625rem] text-white/14">© {new Date().getFullYear()} STEAK./</p>
+        <p className="mt-10 text-center text-[0.625rem] text-white/12">
+          © {new Date().getFullYear()} STEAK./
+        </p>
       </div>
     </div>
   );
@@ -157,17 +187,20 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 
 function Dashboard({ onLogout }: { onLogout: () => void }) {
-  const [tab, setTab] = useState<Tab>("leads");
+  const [tab, setTab]       = useState<Tab>("leads");
   const [seeding, setSeeding] = useState(false);
 
   async function handleSeed() {
     if (!confirm("Завантажити дані з сайту в БД? Таблиці, які вже мають записи, не будуть перезаписані.")) return;
     setSeeding(true);
     try {
-      const res = await apiFetch<{ seeded: string[]; skipped: string[]; errors: Record<string, string> }>("/api/admin/seed", { method: "POST" });
+      const res = await apiFetch<{ seeded: string[]; skipped: string[]; errors: Record<string, string> }>(
+        "/api/admin/seed",
+        { method: "POST" }
+      );
       const msg = [
-        res.seeded.length  ? `✓ Додано: ${res.seeded.join(", ")}`  : "",
-        res.skipped.length ? `→ Пропущено (вже є): ${res.skipped.join(", ")}` : "",
+        res.seeded.length        ? `✓ Додано: ${res.seeded.join(", ")}`           : "",
+        res.skipped.length       ? `→ Пропущено (вже є): ${res.skipped.join(", ")}` : "",
         Object.keys(res.errors).length ? `✗ Помилки: ${JSON.stringify(res.errors)}` : "",
       ].filter(Boolean).join("\n");
       alert(msg || "Готово");
@@ -176,40 +209,49 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   }
 
   const TABS: { id: Tab; label: string }[] = [
-    { id: "leads",      label: "Ліди"          },
-    { id: "cases",      label: "Кейси"         },
-    { id: "services",   label: "Послуги"        },
-    { id: "calculator", label: "Калькулятор"   },
-    { id: "faq",        label: "FAQ"            },
+    { id: "leads",      label: "Ліди"        },
+    { id: "cases",      label: "Кейси"       },
+    { id: "services",   label: "Послуги"     },
+    { id: "calculator", label: "Калькулятор" },
+    { id: "faq",        label: "FAQ"         },
   ];
 
   return (
-    <div className="min-h-screen bg-[#F4F4F4] flex flex-col">
-      <header className="bg-[#0C0C0C] border-b border-white/[0.06] shrink-0">
+    <div className="min-h-screen bg-[#0a0a0a] flex flex-col">
+
+      {/* ─── Header ─── */}
+      <header className="bg-[#0d0d0d] border-b border-white/[0.06] shrink-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="flex items-baseline gap-[2px] select-none">
-              <span className="font-mono text-[0.9375rem] font-bold tracking-[0.08em] uppercase text-white">STEAK</span>
-              <span className="font-mono text-[0.8125rem] text-[#C9A87C]/55">./</span>
+              <span className="font-mono text-[0.9375rem] font-black tracking-[0.08em] uppercase text-white">STEAK</span>
+              <span className="font-mono text-[0.8125rem] text-[#39ff14]/50">./</span>
             </span>
-            <span className="w-px h-4 bg-white/10 hidden sm:block" />
-            <span className="text-[0.8125rem] text-white/35 hidden sm:block">Admin</span>
+            <span className="w-px h-4 bg-white/[0.08] hidden sm:block" />
+            <span className="text-[0.75rem] text-white/25 hidden sm:block">Admin</span>
           </div>
           <div className="flex items-center gap-4">
-            <button onClick={handleSeed} disabled={seeding}
-                    className="flex items-center gap-1.5 text-[0.75rem] text-[#C9A87C]/70 hover:text-[#C9A87C] disabled:opacity-40 transition-colors border border-[#C9A87C]/20 hover:border-[#C9A87C]/40 px-3 py-1.5"
-                    title="Заповнити порожні таблиці даними з сайту">
+            <button
+              onClick={handleSeed}
+              disabled={seeding}
+              title="Заповнити порожні таблиці даними з сайту"
+              className="flex items-center gap-1.5 text-[0.75rem] text-[#39ff14]/60 hover:text-[#39ff14]
+                         disabled:opacity-40 transition-colors border border-[#39ff14]/20
+                         hover:border-[#39ff14]/40 px-3 py-1.5"
+            >
               {seeding
                 ? <svg className="animate-spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" strokeOpacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/></svg>
                 : <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M10 3v4m0 0l-2-2m2 2l2-2M4 10H2m2.93-4.07L3.51 4.51M10 17v-4m0 0l-2 2m2-2l2 2M16 10h2m-2.93-4.07l1.42-1.42M4.93 14.07l-1.42 1.42M15.07 14.07l1.42 1.42"/></svg>
               }
               Seed
             </button>
-            <span className="text-[0.6875rem] text-white/20 tabular-nums hidden sm:block">
+            <span className="text-[0.6875rem] text-white/15 tabular-nums hidden sm:block">
               {new Date().toLocaleDateString("uk-UA", { day: "2-digit", month: "long", year: "numeric", timeZone: "Europe/Kyiv" })}
             </span>
-            <button onClick={onLogout}
-                    className="flex items-center gap-1.5 text-[0.75rem] text-white/35 hover:text-white/70 transition-colors">
+            <button
+              onClick={onLogout}
+              className="flex items-center gap-1.5 text-[0.75rem] text-white/25 hover:text-white/60 transition-colors"
+            >
               <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M13 10H3m0 0l3-3m-3 3l3 3M8 6V5a2 2 0 012-2h6a2 2 0 012 2v10a2 2 0 01-2 2h-6a2 2 0 01-2-2v-1"/>
               </svg>
@@ -219,16 +261,20 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         </div>
       </header>
 
-      <div className="bg-white border-b border-gray-200 shrink-0 overflow-x-auto">
+      {/* ─── Tab nav ─── */}
+      <div className="bg-[#0d0d0d] border-b border-white/[0.06] shrink-0 overflow-x-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex min-w-max">
             {TABS.map((t) => (
-              <button key={t.id} onClick={() => setTab(t.id)}
-                      className={`px-5 py-3.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-                        tab === t.id
-                          ? "border-[#C9A87C] text-gray-900"
-                          : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                      }`}>
+              <button
+                key={t.id}
+                onClick={() => setTab(t.id)}
+                className={`px-5 py-3.5 text-[0.8125rem] font-semibold border-b-2 transition-colors whitespace-nowrap ${
+                  tab === t.id
+                    ? "border-[#39ff14] text-[#39ff14]"
+                    : "border-transparent text-white/30 hover:text-white/60 hover:border-white/20"
+                }`}
+              >
                 {t.label}
               </button>
             ))}
@@ -236,6 +282,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         </div>
       </div>
 
+      {/* ─── Main content ─── */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {tab === "leads"      && <LeadsTab />}
         {tab === "cases"      && <CasesTab />}
@@ -243,6 +290,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         {tab === "calculator" && <CalculatorTab />}
         {tab === "faq"        && <FaqTab />}
       </main>
+
     </div>
   );
 }
@@ -266,8 +314,13 @@ function LeadsTab() {
   const updateStatus = async (id: string, status: LeadStatus) => {
     const prev = leads;
     setLeads(leads.map((l) => (l.id === id ? { ...l, status } : l)));
-    try { await apiFetch(`/api/admin/leads/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status }) }); }
-    catch { setLeads(prev); alert("Помилка оновлення статусу"); }
+    try {
+      await apiFetch(`/api/admin/leads/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+    } catch { setLeads(prev); alert("Помилка оновлення статусу"); }
   };
 
   const remove = async (id: string, name: string) => {
@@ -288,16 +341,17 @@ function LeadsTab() {
         action={<RefreshBtn onClick={load} />}
       />
 
+      {/* Stats cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {[
-          { label: "Всього",    value: total,                                              cls: "text-gray-900"    },
-          { label: "Нові",      value: leads.filter(l => l.status === "new").length,        cls: "text-amber-600"   },
-          { label: "В обробці", value: leads.filter(l => l.status === "in_progress").length, cls: "text-blue-600"    },
-          { label: "Виконано",  value: leads.filter(l => l.status === "done").length,        cls: "text-emerald-600" },
+          { label: "Всього",    value: total,                                               cls: "text-white"       },
+          { label: "Нові",      value: leads.filter(l => l.status === "new").length,        cls: "text-amber-400"   },
+          { label: "В обробці", value: leads.filter(l => l.status === "in_progress").length, cls: "text-blue-400"    },
+          { label: "Виконано",  value: leads.filter(l => l.status === "done").length,        cls: "text-[#39ff14]"   },
         ].map((s) => (
-          <div key={s.label} className="bg-white border border-gray-100 px-5 py-4 shadow-sm">
-            <div className={`text-[2rem] font-bold leading-none mb-1.5 ${s.cls}`}>{s.value}</div>
-            <div className="text-[0.6875rem] text-gray-400 uppercase tracking-[0.1em]">{s.label}</div>
+          <div key={s.label} className="bg-[#111111] border border-white/[0.06] px-5 py-4 hover:border-white/[0.12] transition-colors">
+            <div className={`text-[2rem] font-black leading-none mb-1.5 ${s.cls}`}>{s.value}</div>
+            <div className="text-[0.6875rem] text-white/25 uppercase tracking-[0.1em]">{s.label}</div>
           </div>
         ))}
       </div>
@@ -305,48 +359,68 @@ function LeadsTab() {
       {loading ? <Spinner /> : err ? <ErrorBox msg={err} onRetry={load} /> : leads.length === 0 ? (
         <EmptyBox title="Заявок ще немає" sub="З'являться після першого сабміту форми на лендінгу" />
       ) : (
-        <div className="bg-white border border-gray-100 shadow-sm overflow-hidden">
+        <div className="bg-[#111111] border border-white/[0.06] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-[#0C0C0C]">
+                <tr className="bg-[#0d0d0d] border-b border-white/[0.06]">
                   {["№", "Ім'я", "Телефон", "Сайт / Інст.", "Коментар", "Статус", "Дата", ""].map((h) => (
-                    <th key={h} className="px-4 py-3 text-left text-[0.625rem] font-semibold uppercase tracking-[0.1em] text-white/40 whitespace-nowrap">{h}</th>
+                    <th key={h} className="px-4 py-3 text-left text-[0.625rem] font-bold uppercase tracking-[0.12em] text-white/30 whitespace-nowrap">
+                      {h}
+                    </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-white/[0.04]">
                 {leads.map((lead, idx) => {
                   const ws = fmtWebsite(lead.website);
                   const sc = STATUS_STYLE[lead.status];
                   return (
-                    <tr key={lead.id} className="hover:bg-gray-50/60 transition-colors">
-                      <td className="px-4 py-3.5 text-gray-300 tabular-nums text-xs">{total - idx}</td>
-                      <td className="px-4 py-3.5 font-semibold text-gray-800 whitespace-nowrap">{lead.name}</td>
+                    <tr key={lead.id} className="hover:bg-[#1a1412] transition-colors duration-150">
+                      <td className="px-4 py-3.5 text-white/20 tabular-nums text-xs">{total - idx}</td>
+                      <td className="px-4 py-3.5 font-semibold text-white whitespace-nowrap">{lead.name}</td>
                       <td className="px-4 py-3.5 whitespace-nowrap">
-                        <a href={`tel:${lead.phone.replace(/\s/g,"")}`} className="text-[#C9A87C] hover:underline font-medium">{lead.phone}</a>
+                        <a href={`tel:${lead.phone.replace(/\s/g,"")}`}
+                           className="text-[#39ff14] hover:underline font-medium">
+                          {lead.phone}
+                        </a>
                       </td>
                       <td className="px-4 py-3.5 whitespace-nowrap">
                         {ws ? (
                           <a href={ws.href} target="_blank" rel="noopener noreferrer"
-                             className="text-xs text-gray-500 hover:text-[#C9A87C] underline underline-offset-2 transition-colors">{ws.label}</a>
-                        ) : <span className="text-gray-200 text-xs">—</span>}
+                             className="text-xs text-white/35 hover:text-[#39ff14] underline underline-offset-2 transition-colors">
+                            {ws.label}
+                          </a>
+                        ) : <span className="text-white/12 text-xs">—</span>}
                       </td>
-                      <td className="px-4 py-3.5 text-gray-400 max-w-[220px]">
-                        <span className="line-clamp-2 text-xs leading-snug">{lead.comment ?? <span className="text-gray-200">—</span>}</span>
+                      <td className="px-4 py-3.5 text-white/35 max-w-[220px]">
+                        <span className="line-clamp-2 text-xs leading-snug">
+                          {lead.comment ?? <span className="text-white/12">—</span>}
+                        </span>
                       </td>
                       <td className="px-4 py-3.5 whitespace-nowrap">
-                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-medium ${sc.bg} ${sc.text} ${sc.border}`}>
-                          <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${sc.dot}`} />
-                          <select value={lead.status} onChange={(e) => updateStatus(lead.id, e.target.value as LeadStatus)}
-                                  className={`bg-transparent cursor-pointer focus:outline-none ${sc.text}`}>
-                            {STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 border text-xs font-medium ${sc.bg} ${sc.text} ${sc.border}`}>
+                          <span className={`w-1.5 h-1.5 shrink-0 ${sc.dot}`} />
+                          <select
+                            value={lead.status}
+                            onChange={(e) => updateStatus(lead.id, e.target.value as LeadStatus)}
+                            className={`bg-transparent cursor-pointer focus:outline-none ${sc.text}`}
+                          >
+                            {STATUS_OPTIONS.map((o) => (
+                              <option key={o.value} value={o.value} className="bg-[#111] text-white">
+                                {o.label}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </td>
-                      <td className="px-4 py-3.5 text-gray-300 whitespace-nowrap tabular-nums text-xs">{fmtDate(lead.created_at)}</td>
+                      <td className="px-4 py-3.5 text-white/20 whitespace-nowrap tabular-nums text-xs">{fmtDate(lead.created_at)}</td>
                       <td className="px-4 py-3.5">
-                        <button onClick={() => remove(lead.id, lead.name)} className="text-gray-200 hover:text-red-400 transition-colors" title="Видалити">
+                        <button
+                          onClick={() => remove(lead.id, lead.name)}
+                          className="text-white/20 hover:text-red-400 transition-colors"
+                          title="Видалити"
+                        >
                           <TrashIcon />
                         </button>
                       </td>
@@ -356,8 +430,8 @@ function LeadsTab() {
               </tbody>
             </table>
           </div>
-          <div className="px-4 py-3 border-t border-gray-50 bg-gray-50/40 text-xs text-gray-400">
-            Записів: <strong className="text-gray-600">{total}</strong>
+          <div className="px-4 py-3 border-t border-white/[0.04] bg-[#0d0d0d] text-xs text-white/25">
+            Записів: <strong className="text-white/50">{total}</strong>
           </div>
         </div>
       )}
@@ -370,7 +444,7 @@ function LeadsTab() {
 const EMPTY_CASE = {
   title: "", description: "", client_niche: "",
   location: "", project_type: "", highlight: "",
-  stats_text: "", mockup_type: "landing", accent_color: "#C9A87C",
+  stats_text: "", mockup_type: "landing", accent_color: "#39ff14",
   image_url: "", project_link: "",
 };
 type CaseForm = typeof EMPTY_CASE;
@@ -405,7 +479,7 @@ function CasesTab() {
       highlight:    c.highlight     ?? "",
       stats_text:   c.stats_text    ?? "",
       mockup_type:  c.mockup_type   ?? "landing",
-      accent_color: c.accent_color  ?? "#C9A87C",
+      accent_color: c.accent_color  ?? "#39ff14",
       image_url:    c.image_url     ?? "",
       project_link: c.project_link  ?? "",
     });
@@ -424,15 +498,21 @@ function CasesTab() {
         highlight:    form.highlight.trim()    || null,
         stats_text:   form.stats_text.trim()   || null,
         mockup_type:  form.mockup_type         || "landing",
-        accent_color: form.accent_color        || "#C9A87C",
+        accent_color: form.accent_color        || "#39ff14",
         image_url:    form.image_url.trim()    || null,
         project_link: form.project_link.trim() || null,
       };
       if (modal.editing) {
-        const updated = await apiFetch<CaseRow>(`/api/admin/cases/${modal.editing.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const updated = await apiFetch<CaseRow>(
+          `/api/admin/cases/${modal.editing.id}`,
+          { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
+        );
         setItems((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
       } else {
-        const created = await apiFetch<CaseRow>("/api/admin/cases", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const created = await apiFetch<CaseRow>(
+          "/api/admin/cases",
+          { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
+        );
         setItems((prev) => [created, ...prev]);
       }
       setModal({ open: false, editing: null });
@@ -448,52 +528,92 @@ function CasesTab() {
     catch { setItems(prev); alert("Помилка видалення"); }
   }
 
-  const FIELDS: { key: keyof CaseForm; label: string; placeholder: string; required?: boolean; textarea?: boolean; select?: string[] }[] = [
-    { key: "title",        label: "Назва клієнта",    placeholder: "KitchenBox",                       required: true },
-    { key: "client_niche", label: "Ніша",             placeholder: "Кухні на замовлення"                              },
-    { key: "location",     label: "Локація / ніша",   placeholder: "Київ · кухні на замовлення"                       },
-    { key: "project_type", label: "Тип проекту",      placeholder: "Лендінг"                                          },
-    { key: "highlight",    label: "Ключова метрика",  placeholder: "6.3% конверсія"                                   },
-    { key: "description",  label: "Опис",             placeholder: "Результати, ключові цифри...",      textarea: true  },
+  const FIELDS: {
+    key: keyof CaseForm; label: string; placeholder: string;
+    required?: boolean; textarea?: boolean; select?: string[];
+  }[] = [
+    { key: "title",        label: "Назва клієнта",   placeholder: "KitchenBox",                        required: true },
+    { key: "client_niche", label: "Ніша",            placeholder: "Кухні на замовлення"                               },
+    { key: "location",     label: "Локація / ніша",  placeholder: "Київ · кухні на замовлення"                        },
+    { key: "project_type", label: "Тип проекту",     placeholder: "Лендінг"                                           },
+    { key: "highlight",    label: "Ключова метрика", placeholder: "6.3% конверсія"                                    },
+    { key: "description",  label: "Опис",            placeholder: "Результати, ключові цифри...",       textarea: true },
     { key: "stats_text",   label: "Статистика (3 рядки: значення|підпис)", placeholder: "6.3%|конверсія лідів\n7 дн.|до запуску\n$1.1|ціна ліда", textarea: true },
-    { key: "mockup_type",  label: "Тип мокапу",       placeholder: "landing",                           select: [...MOCKUP_TYPE_OPTIONS] },
-    { key: "accent_color", label: "Акцентний колір",  placeholder: "#C9A87C"                                          },
-    { key: "image_url",    label: "URL зображення",   placeholder: "https://..."                                       },
-    { key: "project_link", label: "Посилання",        placeholder: "https://kitchenbox.ua"                             },
+    { key: "mockup_type",  label: "Тип мокапу",      placeholder: "landing",                            select: [...MOCKUP_TYPE_OPTIONS] },
+    { key: "accent_color", label: "Акцентний колір", placeholder: "#39ff14"                                            },
+    { key: "image_url",    label: "URL зображення",  placeholder: "https://..."                                        },
+    { key: "project_link", label: "Посилання",       placeholder: "https://kitchenbox.ua"                              },
   ];
 
   return (
     <div>
-      <PageHeader title="Кейси / Портфоліо" sub="CRUD · відображаються на сайті"
-                  action={<AddBtn label="Додати кейс" onClick={openAdd} />} />
+      <PageHeader
+        title="Кейси / Портфоліо"
+        sub="CRUD · відображаються на сайті"
+        action={<AddBtn label="Додати кейс" onClick={openAdd} />}
+      />
 
       {loading ? <Spinner /> : err ? <ErrorBox msg={err} onRetry={load} /> : items.length === 0 ? (
         <EmptyBox title="Кейсів ще немає" sub="Натисніть «Додати кейс» щоб створити перший запис" />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((c) => (
-            <div key={c.id} className="bg-white border border-gray-100 shadow-sm flex flex-col overflow-hidden">
+            <div key={c.id}
+                 className="bg-[#111111] border border-white/[0.06] flex flex-col overflow-hidden
+                            hover:border-white/[0.12] transition-colors duration-200">
               {c.image_url
-                ? <div className="h-36 bg-gray-100 shrink-0"><img src={c.image_url} alt={c.title} className="w-full h-full object-cover" /></div>
-                : <div className="h-1 shrink-0" style={{ background: c.accent_color ?? "#C9A87C" }} />
+                ? <div className="h-36 bg-[#0d0d0d] shrink-0">
+                    <img src={c.image_url} alt={c.title} className="w-full h-full object-cover" />
+                  </div>
+                : <div className="h-[3px] shrink-0" style={{ background: c.accent_color ?? "#39ff14" }} />
               }
               <div className="p-4 flex flex-col flex-1 gap-1.5">
                 <div className="flex items-center gap-2 flex-wrap">
-                  {c.client_niche && <span className="text-[0.625rem] text-amber-600 uppercase tracking-widest font-bold">{c.client_niche}</span>}
-                  {c.project_type && <span className="text-[0.625rem] text-gray-400 border border-gray-200 px-1.5 py-0.5 rounded">{c.project_type}</span>}
+                  {c.client_niche && (
+                    <span className="text-[0.625rem] text-[#39ff14]/70 uppercase tracking-widest font-bold">
+                      {c.client_niche}
+                    </span>
+                  )}
+                  {c.project_type && (
+                    <span className="text-[0.625rem] text-white/30 border border-white/[0.08] px-1.5 py-0.5">
+                      {c.project_type}
+                    </span>
+                  )}
                 </div>
-                <h3 className="font-bold text-gray-900 text-[0.9375rem] leading-snug">{c.title}</h3>
-                {c.location && <p className="text-[0.6875rem] text-gray-400">{c.location}</p>}
-                {c.highlight && <p className="text-[0.75rem] font-semibold" style={{ color: c.accent_color ?? "#C9A87C" }}>{c.highlight}</p>}
-                {c.description && <p className="text-xs text-gray-400 line-clamp-2 flex-1">{c.description}</p>}
-                {c.mockup_type && <span className="text-[0.625rem] text-gray-300">мокап: {c.mockup_type}</span>}
-                {c.project_link && <a href={c.project_link} target="_blank" rel="noopener noreferrer" className="text-[0.6875rem] text-[#C9A87C] hover:underline">{c.project_link.replace(/^https?:\/\/(www\.)?/, "")}</a>}
+                <h3 className="font-black text-white text-[0.9375rem] leading-snug uppercase tracking-tight">
+                  {c.title}
+                </h3>
+                {c.location && <p className="text-[0.6875rem] text-white/30">{c.location}</p>}
+                {c.highlight && (
+                  <p className="text-[0.8125rem] font-bold" style={{ color: c.accent_color ?? "#39ff14" }}>
+                    {c.highlight}
+                  </p>
+                )}
+                {c.description && (
+                  <p className="text-xs text-white/35 line-clamp-2 flex-1 leading-relaxed">{c.description}</p>
+                )}
+                {c.mockup_type && (
+                  <span className="text-[0.625rem] text-white/18">мокап: {c.mockup_type}</span>
+                )}
+                {c.project_link && (
+                  <a href={c.project_link} target="_blank" rel="noopener noreferrer"
+                     className="text-[0.6875rem] text-[#39ff14]/60 hover:text-[#39ff14] transition-colors">
+                    {c.project_link.replace(/^https?:\/\/(www\.)?/, "")}
+                  </a>
+                )}
               </div>
-              <div className="flex border-t border-gray-50">
-                <button onClick={() => openEdit(c)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors border-r border-gray-50">
+              <div className="flex border-t border-white/[0.06]">
+                <button
+                  onClick={() => openEdit(c)}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs
+                             text-white/30 hover:text-white hover:bg-[#1a1412] transition-colors border-r border-white/[0.06]"
+                >
                   <EditIcon /> Редагувати
                 </button>
-                <button onClick={() => handleDelete(c.id, c.title)} className="px-4 flex items-center justify-center text-gray-300 hover:text-red-400 hover:bg-red-50 transition-colors">
+                <button
+                  onClick={() => handleDelete(c.id, c.title)}
+                  className="px-4 flex items-center justify-center text-white/20 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                >
                   <TrashIcon />
                 </button>
               </div>
@@ -503,16 +623,42 @@ function CasesTab() {
       )}
 
       {modal.open && (
-        <GenericModal heading={modal.editing ? "Редагувати кейс" : "Новий кейс"} onClose={() => setModal({ open: false, editing: null })} onSubmit={handleSave} saving={saving} disabled={!form.title.trim()}>
+        <GenericModal
+          heading={modal.editing ? "Редагувати кейс" : "Новий кейс"}
+          onClose={() => setModal({ open: false, editing: null })}
+          onSubmit={handleSave}
+          saving={saving}
+          disabled={!form.title.trim()}
+        >
           {FIELDS.map((f) => (
             <ModalField key={f.key} label={f.label} required={f.required}
-              input={f.select
-                ? <select value={form[f.key]} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))} className={IN_CLS}>
-                    {f.select.map((o) => <option key={o} value={o}>{o}</option>)}
-                  </select>
-                : f.textarea
-                ? <textarea value={form[f.key]} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))} placeholder={f.placeholder} rows={f.key === "stats_text" ? 4 : 3} className={TA_CLS} />
-                : <input type="text" value={form[f.key]} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))} placeholder={f.placeholder} required={f.required} className={IN_CLS} />
+              input={
+                f.select
+                  ? <select
+                      value={form[f.key]}
+                      onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))}
+                      className={IN_CLS}
+                    >
+                      {f.select.map((o) => (
+                        <option key={o} value={o} className="bg-[#111] text-white">{o}</option>
+                      ))}
+                    </select>
+                  : f.textarea
+                    ? <textarea
+                        value={form[f.key]}
+                        onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))}
+                        placeholder={f.placeholder}
+                        rows={f.key === "stats_text" ? 4 : 3}
+                        className={TA_CLS}
+                      />
+                    : <input
+                        type="text"
+                        value={form[f.key]}
+                        onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))}
+                        placeholder={f.placeholder}
+                        required={f.required}
+                        className={IN_CLS}
+                      />
               }
             />
           ))}
@@ -524,7 +670,10 @@ function CasesTab() {
 
 // ─── Services Tab ─────────────────────────────────────────────────────────────
 
-const EMPTY_SERVICE = { title: "", description: "", price_from: "200", duration: "7 днів", icon_key: "landing", features: "", sort_order: "0" };
+const EMPTY_SERVICE = {
+  title: "", description: "", price_from: "200",
+  duration: "7 днів", icon_key: "landing", features: "", sort_order: "0",
+};
 type ServiceForm = typeof EMPTY_SERVICE;
 
 function ServicesTab() {
@@ -546,19 +695,41 @@ function ServicesTab() {
 
   function openAdd() { setForm(EMPTY_SERVICE); setModal({ open: true, editing: null }); }
   function openEdit(s: ServiceRow) {
-    setForm({ title: s.title, description: s.description ?? "", price_from: String(s.price_from), duration: s.duration ?? "", icon_key: s.icon_key, features: (s.features ?? []).join("\n"), sort_order: String(s.sort_order) });
+    setForm({
+      title:       s.title,
+      description: s.description ?? "",
+      price_from:  String(s.price_from),
+      duration:    s.duration ?? "",
+      icon_key:    s.icon_key,
+      features:    (s.features ?? []).join("\n"),
+      sort_order:  String(s.sort_order),
+    });
     setModal({ open: true, editing: s });
   }
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault(); setSaving(true);
     try {
-      const body = { title: form.title.trim(), description: form.description.trim() || null, price_from: Number(form.price_from) || 0, duration: form.duration.trim() || null, icon_key: form.icon_key, features: form.features.split("\n").map(s => s.trim()).filter(Boolean), sort_order: Number(form.sort_order) || 0 };
+      const body = {
+        title:       form.title.trim(),
+        description: form.description.trim() || null,
+        price_from:  Number(form.price_from) || 0,
+        duration:    form.duration.trim()    || null,
+        icon_key:    form.icon_key,
+        features:    form.features.split("\n").map(s => s.trim()).filter(Boolean),
+        sort_order:  Number(form.sort_order) || 0,
+      };
       if (modal.editing) {
-        const updated = await apiFetch<ServiceRow>(`/api/admin/services/${modal.editing.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const updated = await apiFetch<ServiceRow>(
+          `/api/admin/services/${modal.editing.id}`,
+          { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
+        );
         setItems((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
       } else {
-        const created = await apiFetch<ServiceRow>("/api/admin/services", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const created = await apiFetch<ServiceRow>(
+          "/api/admin/services",
+          { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
+        );
         setItems((prev) => [...prev, created].sort((a, b) => a.sort_order - b.sort_order));
       }
       setModal({ open: false, editing: null });
@@ -578,38 +749,61 @@ function ServicesTab() {
 
   return (
     <div>
-      <PageHeader title="Послуги" sub="Відображаються на сайті в секції «Що ми робимо»"
-                  action={<AddBtn label="Додати послугу" onClick={openAdd} />} />
+      <PageHeader
+        title="Послуги"
+        sub="Відображаються на сайті в секції «Що ми робимо»"
+        action={<AddBtn label="Додати послугу" onClick={openAdd} />}
+      />
 
       {loading ? <Spinner /> : err ? <ErrorBox msg={err} onRetry={load} /> : items.length === 0 ? (
         <EmptyBox title="Послуг ще немає" sub="Сайт показує вбудовані дані. Додайте послуги щоб керувати ними звідси." />
       ) : (
         <div className="space-y-3">
           {items.map((s, idx) => (
-            <div key={s.id} className="bg-white border border-gray-100 shadow-sm p-5 flex items-start gap-5">
-              <div className="w-8 h-8 rounded bg-gray-50 border border-gray-100 flex items-center justify-center text-[0.625rem] font-bold text-gray-400 shrink-0">
+            <div key={s.id}
+                 className="bg-[#111111] border border-white/[0.06] p-5 flex items-start gap-5
+                            hover:border-white/[0.12] transition-colors duration-200">
+              <div className="w-8 h-8 bg-[#39ff14]/10 border border-[#39ff14]/20 flex items-center justify-center text-[0.625rem] font-black text-[#39ff14] shrink-0">
                 {String(idx + 1).padStart(2, "0")}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-3 mb-1">
-                  <h3 className="font-bold text-gray-900">{s.title}</h3>
-                  <span className="text-[#C9A87C] font-semibold text-sm shrink-0">від ${s.price_from}</span>
+                  <h3 className="font-black text-white uppercase tracking-tight">{s.title}</h3>
+                  <span className="text-[#39ff14] font-bold text-sm shrink-0">від ${s.price_from}</span>
                 </div>
-                {s.duration && <span className="text-xs text-gray-400 mr-3">{s.duration}</span>}
-                <span className="text-xs text-gray-300">icon: {s.icon_key} · порядок: {s.sort_order}</span>
-                {s.description && <p className="text-sm text-gray-500 mt-1.5 line-clamp-2">{s.description}</p>}
+                {s.duration && (
+                  <span className="text-xs text-white/30 mr-3">{s.duration}</span>
+                )}
+                <span className="text-xs text-white/18">icon: {s.icon_key} · порядок: {s.sort_order}</span>
+                {s.description && (
+                  <p className="text-sm text-white/35 mt-1.5 line-clamp-2 leading-relaxed">{s.description}</p>
+                )}
                 {s.features.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-2">
                     {s.features.slice(0, 3).map((f) => (
-                      <span key={f} className="text-[0.625rem] bg-gray-50 border border-gray-100 px-2 py-0.5 text-gray-500">{f}</span>
+                      <span key={f} className="text-[0.625rem] bg-white/[0.04] border border-white/[0.06] px-2 py-0.5 text-white/35">
+                        {f}
+                      </span>
                     ))}
-                    {s.features.length > 3 && <span className="text-[0.625rem] text-gray-300">+{s.features.length - 3} ще</span>}
+                    {s.features.length > 3 && (
+                      <span className="text-[0.625rem] text-white/20">+{s.features.length - 3} ще</span>
+                    )}
                   </div>
                 )}
               </div>
               <div className="flex gap-2 shrink-0">
-                <button onClick={() => openEdit(s)} className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-colors border border-gray-100"><EditIcon /></button>
-                <button onClick={() => handleDelete(s.id, s.title)} className="p-2 text-gray-300 hover:text-red-400 hover:bg-red-50 transition-colors border border-gray-100"><TrashIcon /></button>
+                <button
+                  onClick={() => openEdit(s)}
+                  className="p-2 text-white/25 hover:text-white hover:bg-[#1a1412] transition-colors border border-white/[0.06]"
+                >
+                  <EditIcon />
+                </button>
+                <button
+                  onClick={() => handleDelete(s.id, s.title)}
+                  className="p-2 text-white/20 hover:text-red-400 hover:bg-red-500/10 transition-colors border border-white/[0.06]"
+                >
+                  <TrashIcon />
+                </button>
               </div>
             </div>
           ))}
@@ -617,20 +811,46 @@ function ServicesTab() {
       )}
 
       {modal.open && (
-        <GenericModal heading={modal.editing ? "Редагувати послугу" : "Нова послуга"} onClose={() => setModal({ open: false, editing: null })} onSubmit={handleSave} saving={saving} disabled={!form.title.trim()}>
-          <ModalField label="Назва" required input={<input type="text" value={form.title} onChange={e => setF("title", e.target.value)} placeholder="Лендінги для лідогенерації" required className={IN_CLS} />} />
+        <GenericModal
+          heading={modal.editing ? "Редагувати послугу" : "Нова послуга"}
+          onClose={() => setModal({ open: false, editing: null })}
+          onSubmit={handleSave}
+          saving={saving}
+          disabled={!form.title.trim()}
+        >
+          <ModalField label="Назва" required input={
+            <input type="text" value={form.title} onChange={e => setF("title", e.target.value)}
+                   placeholder="Лендінги для лідогенерації" required className={IN_CLS} />
+          } />
           <div className="grid grid-cols-2 gap-3">
-            <ModalField label="Ціна від ($)" input={<input type="number" value={form.price_from} onChange={e => setF("price_from", e.target.value)} placeholder="200" className={IN_CLS} />} />
-            <ModalField label="Термін" input={<input type="text" value={form.duration} onChange={e => setF("duration", e.target.value)} placeholder="7 днів" className={IN_CLS} />} />
+            <ModalField label="Ціна від ($)" input={
+              <input type="number" value={form.price_from} onChange={e => setF("price_from", e.target.value)}
+                     placeholder="200" className={IN_CLS} />
+            } />
+            <ModalField label="Термін" input={
+              <input type="text" value={form.duration} onChange={e => setF("duration", e.target.value)}
+                     placeholder="7 днів" className={IN_CLS} />
+            } />
           </div>
           <ModalField label="Іконка" input={
             <select value={form.icon_key} onChange={e => setF("icon_key", e.target.value)} className={IN_CLS}>
-              {ICON_KEYS.map(k => <option key={k} value={k}>{k}</option>)}
+              {ICON_KEYS.map(k => (
+                <option key={k} value={k} className="bg-[#111] text-white">{k}</option>
+              ))}
             </select>
           } />
-          <ModalField label="Опис" input={<textarea value={form.description} onChange={e => setF("description", e.target.value)} placeholder="Короткий опис послуги..." rows={3} className={TA_CLS} />} />
-          <ModalField label="Переваги (кожна з нового рядка)" input={<textarea value={form.features} onChange={e => setF("features", e.target.value)} placeholder={"Розробка під конкретний оффер\nPageSpeed 95+"} rows={4} className={TA_CLS} />} />
-          <ModalField label="Порядок (sort)" input={<input type="number" value={form.sort_order} onChange={e => setF("sort_order", e.target.value)} placeholder="0" className={IN_CLS} />} />
+          <ModalField label="Опис" input={
+            <textarea value={form.description} onChange={e => setF("description", e.target.value)}
+                      placeholder="Короткий опис послуги..." rows={3} className={TA_CLS} />
+          } />
+          <ModalField label="Переваги (кожна з нового рядка)" input={
+            <textarea value={form.features} onChange={e => setF("features", e.target.value)}
+                      placeholder={"Розробка під конкретний оффер\nPageSpeed 95+"} rows={4} className={TA_CLS} />
+          } />
+          <ModalField label="Порядок (sort)" input={
+            <input type="number" value={form.sort_order} onChange={e => setF("sort_order", e.target.value)}
+                   placeholder="0" className={IN_CLS} />
+          } />
         </GenericModal>
       )}
     </div>
@@ -639,20 +859,20 @@ function ServicesTab() {
 
 // ─── Calculator Tab ───────────────────────────────────────────────────────────
 
-const EMPTY_CALC_TYPE  = { label: "", description: "", base_price: "200",  duration: "7 днів", sort_order: "0" };
+const EMPTY_CALC_TYPE  = { label: "", description: "", base_price: "200", duration: "7 днів", sort_order: "0" };
 const EMPTY_CALC_ADDON = { label: "", price: "80", sort_order: "0" };
 type CalcTypeForm  = typeof EMPTY_CALC_TYPE;
 type CalcAddonForm = typeof EMPTY_CALC_ADDON;
 
 function CalculatorTab() {
-  const [types,    setTypes]    = useState<CalcType[]>([]);
-  const [addons,   setAddons]   = useState<CalcAddon[]>([]);
-  const [loading,  setLoading]  = useState(true);
-  const [err,      setErr]      = useState<string | null>(null);
+  const [types,   setTypes]   = useState<CalcType[]>([]);
+  const [addons,  setAddons]  = useState<CalcAddon[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [err,     setErr]     = useState<string | null>(null);
   const [typeModal,  setTypeModal]  = useState<{ open: boolean; editing: CalcType  | null }>({ open: false, editing: null });
   const [addonModal, setAddonModal] = useState<{ open: boolean; editing: CalcAddon | null }>({ open: false, editing: null });
-  const [typeForm,  setTypeForm]  = useState<CalcTypeForm>(EMPTY_CALC_TYPE);
-  const [addonForm, setAddonForm] = useState<CalcAddonForm>(EMPTY_CALC_ADDON);
+  const [typeForm,   setTypeForm]   = useState<CalcTypeForm>(EMPTY_CALC_TYPE);
+  const [addonForm,  setAddonForm]  = useState<CalcAddonForm>(EMPTY_CALC_ADDON);
   const [saving, setSaving] = useState(false);
 
   const load = useCallback(async () => {
@@ -669,16 +889,27 @@ function CalculatorTab() {
 
   useEffect(() => { load(); }, [load]);
 
-  // ── Type CRUD ──
   async function saveType(e: React.FormEvent) {
     e.preventDefault(); setSaving(true);
     try {
-      const body = { label: typeForm.label.trim(), description: typeForm.description.trim() || null, base_price: Number(typeForm.base_price) || 0, duration: typeForm.duration.trim() || null, sort_order: Number(typeForm.sort_order) || 0 };
+      const body = {
+        label:       typeForm.label.trim(),
+        description: typeForm.description.trim() || null,
+        base_price:  Number(typeForm.base_price) || 0,
+        duration:    typeForm.duration.trim()    || null,
+        sort_order:  Number(typeForm.sort_order) || 0,
+      };
       if (typeModal.editing) {
-        const u = await apiFetch<CalcType>(`/api/admin/calc-types/${typeModal.editing.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const u = await apiFetch<CalcType>(
+          `/api/admin/calc-types/${typeModal.editing.id}`,
+          { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
+        );
         setTypes(prev => prev.map(t => t.id === u.id ? u : t));
       } else {
-        const c = await apiFetch<CalcType>("/api/admin/calc-types", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const c = await apiFetch<CalcType>(
+          "/api/admin/calc-types",
+          { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
+        );
         setTypes(prev => [...prev, c].sort((a, b) => a.sort_order - b.sort_order));
       }
       setTypeModal({ open: false, editing: null });
@@ -694,16 +925,25 @@ function CalculatorTab() {
     catch { setTypes(prev); alert("Помилка видалення"); }
   }
 
-  // ── Addon CRUD ──
   async function saveAddon(e: React.FormEvent) {
     e.preventDefault(); setSaving(true);
     try {
-      const body = { label: addonForm.label.trim(), price: Number(addonForm.price) || 0, sort_order: Number(addonForm.sort_order) || 0 };
+      const body = {
+        label:      addonForm.label.trim(),
+        price:      Number(addonForm.price)      || 0,
+        sort_order: Number(addonForm.sort_order) || 0,
+      };
       if (addonModal.editing) {
-        const u = await apiFetch<CalcAddon>(`/api/admin/calc-addons/${addonModal.editing.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const u = await apiFetch<CalcAddon>(
+          `/api/admin/calc-addons/${addonModal.editing.id}`,
+          { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
+        );
         setAddons(prev => prev.map(a => a.id === u.id ? u : a));
       } else {
-        const c = await apiFetch<CalcAddon>("/api/admin/calc-addons", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const c = await apiFetch<CalcAddon>(
+          "/api/admin/calc-addons",
+          { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
+        );
         setAddons(prev => [...prev, c].sort((a, b) => a.sort_order - b.sort_order));
       }
       setAddonModal({ open: false, editing: null });
@@ -729,33 +969,55 @@ function CalculatorTab() {
       {/* ── Types ── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-bold text-gray-800">Типи проектів</h2>
-          <AddBtn label="Додати тип" onClick={() => { setTypeForm(EMPTY_CALC_TYPE); setTypeModal({ open: true, editing: null }); }} />
+          <h2 className="font-black text-white uppercase tracking-tight">Типи проектів</h2>
+          <AddBtn
+            label="Додати тип"
+            onClick={() => { setTypeForm(EMPTY_CALC_TYPE); setTypeModal({ open: true, editing: null }); }}
+          />
         </div>
         {types.length === 0 ? (
           <EmptyBox title="Типів ще немає" sub="Сайт показує вбудовані дані" />
         ) : (
-          <div className="bg-white border border-gray-100 shadow-sm overflow-hidden">
+          <div className="bg-[#111111] border border-white/[0.06] overflow-hidden">
             <table className="w-full text-sm">
-              <thead><tr className="bg-[#0C0C0C]">
-                {["Назва", "Ціна", "Термін", "Порядок", ""].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-[0.625rem] font-semibold uppercase tracking-[0.1em] text-white/40">{h}</th>
-                ))}
-              </tr></thead>
-              <tbody className="divide-y divide-gray-50">
+              <thead>
+                <tr className="bg-[#0d0d0d] border-b border-white/[0.06]">
+                  {["Назва", "Ціна", "Термін", "Порядок", ""].map(h => (
+                    <th key={h} className="px-4 py-3 text-left text-[0.625rem] font-bold uppercase tracking-[0.12em] text-white/30">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.04]">
                 {types.map((t) => (
-                  <tr key={t.id} className="hover:bg-gray-50/60 transition-colors">
+                  <tr key={t.id} className="hover:bg-[#1a1412] transition-colors duration-150">
                     <td className="px-4 py-3.5">
-                      <div className="font-semibold text-gray-800">{t.label}</div>
-                      {t.description && <div className="text-xs text-gray-400 line-clamp-1 mt-0.5">{t.description}</div>}
+                      <div className="font-semibold text-white">{t.label}</div>
+                      {t.description && (
+                        <div className="text-xs text-white/30 line-clamp-1 mt-0.5">{t.description}</div>
+                      )}
                     </td>
-                    <td className="px-4 py-3.5 font-semibold text-[#C9A87C] whitespace-nowrap">${t.base_price}</td>
-                    <td className="px-4 py-3.5 text-gray-500 whitespace-nowrap">{t.duration ?? "—"}</td>
-                    <td className="px-4 py-3.5 text-gray-300 tabular-nums text-xs">{t.sort_order}</td>
+                    <td className="px-4 py-3.5 font-bold text-[#39ff14] whitespace-nowrap">${t.base_price}</td>
+                    <td className="px-4 py-3.5 text-white/40 whitespace-nowrap">{t.duration ?? "—"}</td>
+                    <td className="px-4 py-3.5 text-white/20 tabular-nums text-xs">{t.sort_order}</td>
                     <td className="px-4 py-3.5">
                       <div className="flex gap-2">
-                        <button onClick={() => { setTypeForm({ label: t.label, description: t.description ?? "", base_price: String(t.base_price), duration: t.duration ?? "", sort_order: String(t.sort_order) }); setTypeModal({ open: true, editing: t }); }} className="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-colors border border-gray-100"><EditIcon /></button>
-                        <button onClick={() => deleteType(t.id, t.label)} className="p-1.5 text-gray-300 hover:text-red-400 hover:bg-red-50 transition-colors border border-gray-100"><TrashIcon /></button>
+                        <button
+                          onClick={() => {
+                            setTypeForm({ label: t.label, description: t.description ?? "", base_price: String(t.base_price), duration: t.duration ?? "", sort_order: String(t.sort_order) });
+                            setTypeModal({ open: true, editing: t });
+                          }}
+                          className="p-1.5 text-white/25 hover:text-white hover:bg-[#1a1412] transition-colors border border-white/[0.06]"
+                        >
+                          <EditIcon />
+                        </button>
+                        <button
+                          onClick={() => deleteType(t.id, t.label)}
+                          className="p-1.5 text-white/20 hover:text-red-400 hover:bg-red-500/10 transition-colors border border-white/[0.06]"
+                        >
+                          <TrashIcon />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -769,29 +1031,49 @@ function CalculatorTab() {
       {/* ── Addons ── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-bold text-gray-800">Додаткові опції</h2>
-          <AddBtn label="Додати опцію" onClick={() => { setAddonForm(EMPTY_CALC_ADDON); setAddonModal({ open: true, editing: null }); }} />
+          <h2 className="font-black text-white uppercase tracking-tight">Додаткові опції</h2>
+          <AddBtn
+            label="Додати опцію"
+            onClick={() => { setAddonForm(EMPTY_CALC_ADDON); setAddonModal({ open: true, editing: null }); }}
+          />
         </div>
         {addons.length === 0 ? (
           <EmptyBox title="Опцій ще немає" sub="Сайт показує вбудовані дані" />
         ) : (
-          <div className="bg-white border border-gray-100 shadow-sm overflow-hidden">
+          <div className="bg-[#111111] border border-white/[0.06] overflow-hidden">
             <table className="w-full text-sm">
-              <thead><tr className="bg-[#0C0C0C]">
-                {["Назва", "Ціна", "Порядок", ""].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-[0.625rem] font-semibold uppercase tracking-[0.1em] text-white/40">{h}</th>
-                ))}
-              </tr></thead>
-              <tbody className="divide-y divide-gray-50">
+              <thead>
+                <tr className="bg-[#0d0d0d] border-b border-white/[0.06]">
+                  {["Назва", "Ціна", "Порядок", ""].map(h => (
+                    <th key={h} className="px-4 py-3 text-left text-[0.625rem] font-bold uppercase tracking-[0.12em] text-white/30">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.04]">
                 {addons.map((a) => (
-                  <tr key={a.id} className="hover:bg-gray-50/60 transition-colors">
-                    <td className="px-4 py-3.5 font-semibold text-gray-800">{a.label}</td>
-                    <td className="px-4 py-3.5 font-semibold text-[#C9A87C] whitespace-nowrap">+${a.price}</td>
-                    <td className="px-4 py-3.5 text-gray-300 tabular-nums text-xs">{a.sort_order}</td>
+                  <tr key={a.id} className="hover:bg-[#1a1412] transition-colors duration-150">
+                    <td className="px-4 py-3.5 font-semibold text-white">{a.label}</td>
+                    <td className="px-4 py-3.5 font-bold text-[#39ff14] whitespace-nowrap">+${a.price}</td>
+                    <td className="px-4 py-3.5 text-white/20 tabular-nums text-xs">{a.sort_order}</td>
                     <td className="px-4 py-3.5">
                       <div className="flex gap-2">
-                        <button onClick={() => { setAddonForm({ label: a.label, price: String(a.price), sort_order: String(a.sort_order) }); setAddonModal({ open: true, editing: a }); }} className="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-colors border border-gray-100"><EditIcon /></button>
-                        <button onClick={() => deleteAddon(a.id, a.label)} className="p-1.5 text-gray-300 hover:text-red-400 hover:bg-red-50 transition-colors border border-gray-100"><TrashIcon /></button>
+                        <button
+                          onClick={() => {
+                            setAddonForm({ label: a.label, price: String(a.price), sort_order: String(a.sort_order) });
+                            setAddonModal({ open: true, editing: a });
+                          }}
+                          className="p-1.5 text-white/25 hover:text-white hover:bg-[#1a1412] transition-colors border border-white/[0.06]"
+                        >
+                          <EditIcon />
+                        </button>
+                        <button
+                          onClick={() => deleteAddon(a.id, a.label)}
+                          className="p-1.5 text-white/20 hover:text-red-400 hover:bg-red-500/10 transition-colors border border-white/[0.06]"
+                        >
+                          <TrashIcon />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -804,24 +1086,60 @@ function CalculatorTab() {
 
       {/* Type modal */}
       {typeModal.open && (
-        <GenericModal heading={typeModal.editing ? "Редагувати тип" : "Новий тип проекту"} onClose={() => setTypeModal({ open: false, editing: null })} onSubmit={saveType} saving={saving} disabled={!typeForm.label.trim()}>
-          <ModalField label="Назва" required input={<input type="text" value={typeForm.label} onChange={e => setTypeForm(p => ({ ...p, label: e.target.value }))} placeholder="Лендінг" required className={IN_CLS} />} />
+        <GenericModal
+          heading={typeModal.editing ? "Редагувати тип" : "Новий тип проекту"}
+          onClose={() => setTypeModal({ open: false, editing: null })}
+          onSubmit={saveType}
+          saving={saving}
+          disabled={!typeForm.label.trim()}
+        >
+          <ModalField label="Назва" required input={
+            <input type="text" value={typeForm.label} onChange={e => setTypeForm(p => ({ ...p, label: e.target.value }))}
+                   placeholder="Лендінг" required className={IN_CLS} />
+          } />
           <div className="grid grid-cols-2 gap-3">
-            <ModalField label="Базова ціна ($)" input={<input type="number" value={typeForm.base_price} onChange={e => setTypeForm(p => ({ ...p, base_price: e.target.value }))} placeholder="200" className={IN_CLS} />} />
-            <ModalField label="Термін" input={<input type="text" value={typeForm.duration} onChange={e => setTypeForm(p => ({ ...p, duration: e.target.value }))} placeholder="7 днів" className={IN_CLS} />} />
+            <ModalField label="Базова ціна ($)" input={
+              <input type="number" value={typeForm.base_price} onChange={e => setTypeForm(p => ({ ...p, base_price: e.target.value }))}
+                     placeholder="200" className={IN_CLS} />
+            } />
+            <ModalField label="Термін" input={
+              <input type="text" value={typeForm.duration} onChange={e => setTypeForm(p => ({ ...p, duration: e.target.value }))}
+                     placeholder="7 днів" className={IN_CLS} />
+            } />
           </div>
-          <ModalField label="Опис" input={<textarea value={typeForm.description} onChange={e => setTypeForm(p => ({ ...p, description: e.target.value }))} placeholder="Короткий опис типу проекту..." rows={2} className={TA_CLS} />} />
-          <ModalField label="Порядок (sort)" input={<input type="number" value={typeForm.sort_order} onChange={e => setTypeForm(p => ({ ...p, sort_order: e.target.value }))} placeholder="0" className={IN_CLS} />} />
+          <ModalField label="Опис" input={
+            <textarea value={typeForm.description} onChange={e => setTypeForm(p => ({ ...p, description: e.target.value }))}
+                      placeholder="Короткий опис типу проекту..." rows={2} className={TA_CLS} />
+          } />
+          <ModalField label="Порядок (sort)" input={
+            <input type="number" value={typeForm.sort_order} onChange={e => setTypeForm(p => ({ ...p, sort_order: e.target.value }))}
+                   placeholder="0" className={IN_CLS} />
+          } />
         </GenericModal>
       )}
 
       {/* Addon modal */}
       {addonModal.open && (
-        <GenericModal heading={addonModal.editing ? "Редагувати опцію" : "Нова опція"} onClose={() => setAddonModal({ open: false, editing: null })} onSubmit={saveAddon} saving={saving} disabled={!addonForm.label.trim()}>
-          <ModalField label="Назва опції" required input={<input type="text" value={addonForm.label} onChange={e => setAddonForm(p => ({ ...p, label: e.target.value }))} placeholder="SEO оптимізація" required className={IN_CLS} />} />
+        <GenericModal
+          heading={addonModal.editing ? "Редагувати опцію" : "Нова опція"}
+          onClose={() => setAddonModal({ open: false, editing: null })}
+          onSubmit={saveAddon}
+          saving={saving}
+          disabled={!addonForm.label.trim()}
+        >
+          <ModalField label="Назва опції" required input={
+            <input type="text" value={addonForm.label} onChange={e => setAddonForm(p => ({ ...p, label: e.target.value }))}
+                   placeholder="SEO оптимізація" required className={IN_CLS} />
+          } />
           <div className="grid grid-cols-2 gap-3">
-            <ModalField label="Ціна ($)" input={<input type="number" value={addonForm.price} onChange={e => setAddonForm(p => ({ ...p, price: e.target.value }))} placeholder="80" className={IN_CLS} />} />
-            <ModalField label="Порядок (sort)" input={<input type="number" value={addonForm.sort_order} onChange={e => setAddonForm(p => ({ ...p, sort_order: e.target.value }))} placeholder="0" className={IN_CLS} />} />
+            <ModalField label="Ціна ($)" input={
+              <input type="number" value={addonForm.price} onChange={e => setAddonForm(p => ({ ...p, price: e.target.value }))}
+                     placeholder="80" className={IN_CLS} />
+            } />
+            <ModalField label="Порядок (sort)" input={
+              <input type="number" value={addonForm.sort_order} onChange={e => setAddonForm(p => ({ ...p, sort_order: e.target.value }))}
+                     placeholder="0" className={IN_CLS} />
+            } />
           </div>
         </GenericModal>
       )}
@@ -860,12 +1178,22 @@ function FaqTab() {
   async function handleSave(e: React.FormEvent) {
     e.preventDefault(); setSaving(true);
     try {
-      const body = { question: form.question.trim(), answer: form.answer.trim(), sort_order: Number(form.sort_order) || 0 };
+      const body = {
+        question:   form.question.trim(),
+        answer:     form.answer.trim(),
+        sort_order: Number(form.sort_order) || 0,
+      };
       if (modal.editing) {
-        const u = await apiFetch<FaqItem>(`/api/admin/faq/${modal.editing.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const u = await apiFetch<FaqItem>(
+          `/api/admin/faq/${modal.editing.id}`,
+          { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
+        );
         setItems(prev => prev.map(i => i.id === u.id ? u : i));
       } else {
-        const c = await apiFetch<FaqItem>("/api/admin/faq", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const c = await apiFetch<FaqItem>(
+          "/api/admin/faq",
+          { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
+        );
         setItems(prev => [...prev, c].sort((a, b) => a.sort_order - b.sort_order));
       }
       setModal({ open: false, editing: null });
@@ -883,27 +1211,42 @@ function FaqTab() {
 
   return (
     <div>
-      <PageHeader title="FAQ" sub="Питання та відповіді на лендінгу"
-                  action={<AddBtn label="Додати питання" onClick={openAdd} />} />
+      <PageHeader
+        title="FAQ"
+        sub="Питання та відповіді на лендінгу"
+        action={<AddBtn label="Додати питання" onClick={openAdd} />}
+      />
 
       {loading ? <Spinner /> : err ? <ErrorBox msg={err} onRetry={load} /> : items.length === 0 ? (
         <EmptyBox title="Питань ще немає" sub="Сайт показує вбудовані дані. Додайте питання щоб керувати ними звідси." />
       ) : (
         <div className="space-y-3">
           {items.map((item, idx) => (
-            <div key={item.id} className="bg-white border border-gray-100 shadow-sm p-5">
+            <div key={item.id}
+                 className="bg-[#111111] border border-white/[0.06] p-5
+                            hover:border-white/[0.12] transition-colors duration-200">
               <div className="flex items-start gap-4">
-                <span className="w-7 h-7 rounded bg-gray-50 border border-gray-100 flex items-center justify-center text-[0.625rem] font-bold text-gray-400 shrink-0 mt-0.5">
+                <span className="w-7 h-7 bg-[#39ff14]/10 border border-[#39ff14]/20 flex items-center justify-center text-[0.625rem] font-black text-[#39ff14] shrink-0 mt-0.5">
                   {String(idx + 1).padStart(2, "0")}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 mb-1.5">{item.question}</p>
-                  <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed">{item.answer}</p>
-                  <span className="text-[0.625rem] text-gray-300 mt-1 block">порядок: {item.sort_order}</span>
+                  <p className="font-bold text-white mb-1.5">{item.question}</p>
+                  <p className="text-sm text-white/35 line-clamp-2 leading-relaxed">{item.answer}</p>
+                  <span className="text-[0.625rem] text-white/18 mt-1 block">порядок: {item.sort_order}</span>
                 </div>
                 <div className="flex gap-2 shrink-0">
-                  <button onClick={() => openEdit(item)} className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-colors border border-gray-100"><EditIcon /></button>
-                  <button onClick={() => handleDelete(item.id, item.question)} className="p-2 text-gray-300 hover:text-red-400 hover:bg-red-50 transition-colors border border-gray-100"><TrashIcon /></button>
+                  <button
+                    onClick={() => openEdit(item)}
+                    className="p-2 text-white/25 hover:text-white hover:bg-[#1a1412] transition-colors border border-white/[0.06]"
+                  >
+                    <EditIcon />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item.id, item.question)}
+                    className="p-2 text-white/20 hover:text-red-400 hover:bg-red-500/10 transition-colors border border-white/[0.06]"
+                  >
+                    <TrashIcon />
+                  </button>
                 </div>
               </div>
             </div>
@@ -912,10 +1255,25 @@ function FaqTab() {
       )}
 
       {modal.open && (
-        <GenericModal heading={modal.editing ? "Редагувати питання" : "Нове питання"} onClose={() => setModal({ open: false, editing: null })} onSubmit={handleSave} saving={saving} disabled={!form.question.trim() || !form.answer.trim()}>
-          <ModalField label="Питання" required input={<textarea value={form.question} onChange={e => setForm(p => ({ ...p, question: e.target.value }))} placeholder="Чому такі ціни на лендінг від $200?" rows={2} required className={TA_CLS} />} />
-          <ModalField label="Відповідь" required input={<textarea value={form.answer} onChange={e => setForm(p => ({ ...p, answer: e.target.value }))} placeholder="Ми спеціалізуємось виключно..." rows={5} required className={TA_CLS} />} />
-          <ModalField label="Порядок (sort)" input={<input type="number" value={form.sort_order} onChange={e => setForm(p => ({ ...p, sort_order: e.target.value }))} placeholder="0" className={IN_CLS} />} />
+        <GenericModal
+          heading={modal.editing ? "Редагувати питання" : "Нове питання"}
+          onClose={() => setModal({ open: false, editing: null })}
+          onSubmit={handleSave}
+          saving={saving}
+          disabled={!form.question.trim() || !form.answer.trim()}
+        >
+          <ModalField label="Питання" required input={
+            <textarea value={form.question} onChange={e => setForm(p => ({ ...p, question: e.target.value }))}
+                      placeholder="Чому такі ціни на лендінг від $200?" rows={2} required className={TA_CLS} />
+          } />
+          <ModalField label="Відповідь" required input={
+            <textarea value={form.answer} onChange={e => setForm(p => ({ ...p, answer: e.target.value }))}
+                      placeholder="Ми спеціалізуємось виключно..." rows={5} required className={TA_CLS} />
+          } />
+          <ModalField label="Порядок (sort)" input={
+            <input type="number" value={form.sort_order} onChange={e => setForm(p => ({ ...p, sort_order: e.target.value }))}
+                   placeholder="0" className={IN_CLS} />
+          } />
         </GenericModal>
       )}
     </div>
@@ -924,15 +1282,17 @@ function FaqTab() {
 
 // ─── Shared UI primitives ─────────────────────────────────────────────────────
 
-const IN_CLS = "w-full border border-gray-200 px-3 py-2.5 text-sm text-gray-900 placeholder-gray-300 focus:outline-none focus:border-gray-400 transition-colors";
+const IN_CLS =
+  "w-full border border-white/[0.1] bg-white/[0.04] px-3 py-2.5 text-sm text-white " +
+  "placeholder-white/20 focus:outline-none focus:border-[#39ff14]/50 transition-colors";
 const TA_CLS = `${IN_CLS} resize-none`;
 
 function PageHeader({ title, sub, action }: { title: string; sub?: string; action?: React.ReactNode }) {
   return (
     <div className="flex items-start justify-between gap-4 mb-6">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">{title}</h1>
-        {sub && <p className="text-sm text-gray-400 mt-0.5">{sub}</p>}
+        <h1 className="text-xl font-black text-white uppercase tracking-tight">{title}</h1>
+        {sub && <p className="text-sm text-white/28 mt-0.5">{sub}</p>}
       </div>
       {action}
     </div>
@@ -941,9 +1301,15 @@ function PageHeader({ title, sub, action }: { title: string; sub?: string; actio
 
 function AddBtn({ label, onClick }: { label: string; onClick: () => void }) {
   return (
-    <button onClick={onClick}
-            className="flex items-center gap-2 bg-[#C9A87C] text-[#0C0C0C] text-sm font-bold px-4 py-2.5 hover:bg-[#b8976b] transition-colors shrink-0">
-      <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M10 4v12M4 10h12"/></svg>
+    <button
+      onClick={onClick}
+      className="flex items-center gap-2 bg-[#39ff14] text-[#0a0a0a] text-sm font-black
+                 px-4 py-2.5 uppercase tracking-[0.06em] hover:bg-[#2ee610] transition-colors
+                 active:scale-[0.97] shrink-0"
+    >
+      <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+        <path d="M10 4v12M4 10h12"/>
+      </svg>
       {label}
     </button>
   );
@@ -951,8 +1317,11 @@ function AddBtn({ label, onClick }: { label: string; onClick: () => void }) {
 
 function RefreshBtn({ onClick }: { onClick: () => void }) {
   return (
-    <button onClick={onClick}
-            className="flex items-center gap-1.5 text-sm text-gray-500 border border-gray-200 px-3 py-2 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+    <button
+      onClick={onClick}
+      className="flex items-center gap-1.5 text-sm text-white/35 border border-white/[0.08]
+                 px-3 py-2 hover:bg-[#1a1412] hover:text-white/70 hover:border-white/[0.15] transition-colors"
+    >
       <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 4v5h5"/><path d="M16 16v-5h-5"/><path d="M17.5 8.5A7.5 7.5 0 104.5 15"/>
       </svg>
@@ -964,25 +1333,27 @@ function RefreshBtn({ onClick }: { onClick: () => void }) {
 function Spinner() {
   return (
     <div className="flex items-center justify-center py-24">
-      <div className="w-6 h-6 border-2 border-gray-200 border-t-gray-500 rounded-full animate-spin" />
+      <div className="w-6 h-6 border-2 border-white/[0.08] border-t-[#39ff14] rounded-full animate-spin" />
     </div>
   );
 }
 
 function ErrorBox({ msg, onRetry }: { msg: string; onRetry: () => void }) {
   return (
-    <div className="bg-white border border-red-100 shadow-sm flex flex-col items-center justify-center py-16 text-center">
-      <p className="text-red-500 font-medium mb-2">Помилка: {msg}</p>
-      <button onClick={onRetry} className="text-sm text-gray-500 underline">Спробувати ще раз</button>
+    <div className="bg-[#111111] border border-red-500/20 flex flex-col items-center justify-center py-16 text-center">
+      <p className="text-red-400 font-medium mb-2">Помилка: {msg}</p>
+      <button onClick={onRetry} className="text-sm text-white/35 hover:text-white underline transition-colors">
+        Спробувати ще раз
+      </button>
     </div>
   );
 }
 
 function EmptyBox({ title, sub, children }: { title: string; sub: string; children?: React.ReactNode }) {
   return (
-    <div className="bg-white border border-gray-100 shadow-sm flex flex-col items-center justify-center py-16 text-center">
-      <p className="font-semibold text-gray-700 mb-1">{title}</p>
-      <p className="text-sm text-gray-400 max-w-xs leading-relaxed">{sub}</p>
+    <div className="bg-[#111111] border border-white/[0.06] border-dashed flex flex-col items-center justify-center py-16 text-center">
+      <p className="font-bold text-white/50 mb-1">{title}</p>
+      <p className="text-sm text-white/25 max-w-xs leading-relaxed">{sub}</p>
       {children}
     </div>
   );
@@ -996,24 +1367,41 @@ function GenericModal({
   saving: boolean; disabled?: boolean; children: React.ReactNode;
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-         onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="bg-white w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">
-          <h2 className="font-bold text-gray-900">{heading}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-700 transition-colors" aria-label="Закрити">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M4 4l12 12M16 4L4 16"/></svg>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div className="bg-[#111111] border border-white/[0.1] w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] shrink-0">
+          <h2 className="font-black text-white uppercase tracking-tight">{heading}</h2>
+          <button
+            onClick={onClose}
+            className="text-white/25 hover:text-white transition-colors"
+            aria-label="Закрити"
+          >
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <path d="M4 4l12 12M16 4L4 16"/>
+            </svg>
           </button>
         </div>
         <form onSubmit={onSubmit} className="flex flex-col flex-1 overflow-hidden">
           <div className="px-6 py-5 space-y-4 overflow-y-auto flex-1">{children}</div>
-          <div className="px-6 py-4 border-t border-gray-100 flex gap-3 shrink-0">
-            <button type="button" onClick={onClose}
-                    className="flex-1 py-2.5 border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+          <div className="px-6 py-4 border-t border-white/[0.06] flex gap-3 shrink-0">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 py-2.5 border border-white/[0.1] text-sm text-white/40
+                         hover:bg-white/[0.04] hover:text-white/70 transition-colors"
+            >
               Скасувати
             </button>
-            <button type="submit" disabled={saving || disabled}
-                    className="flex-1 py-2.5 bg-[#C9A87C] text-[#0C0C0C] text-sm font-bold hover:bg-[#b8976b] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+            <button
+              type="submit"
+              disabled={saving || disabled}
+              className="flex-1 py-2.5 bg-[#39ff14] text-[#0a0a0a] text-sm font-black uppercase
+                         tracking-[0.06em] hover:bg-[#2ee610] disabled:opacity-40
+                         disabled:cursor-not-allowed transition-colors"
+            >
               {saving ? "Збереження..." : "Зберегти"}
             </button>
           </div>
@@ -1026,7 +1414,7 @@ function GenericModal({
 function ModalField({ label, required, input }: { label: string; required?: boolean; input: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+      <label className="block text-[0.6875rem] font-bold text-white/35 uppercase tracking-[0.1em] mb-1.5">
         {label}{required && <span className="text-red-400 ml-0.5">*</span>}
       </label>
       {input}
