@@ -3,12 +3,10 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════
-   BASE — reset, scrollbar, selection, focus
+   BASE
 ═══════════════════════════════════════════════════════════ */
 @layer base {
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
+  *, *::before, *::after { box-sizing: border-box; }
 
   html {
     scroll-behavior: smooth;
@@ -17,35 +15,36 @@
   }
 
   body {
-    @apply bg-[#0a0a0a] text-white antialiased;
+    background-color: #120E0B;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Neon green scrollbar */
+  /* Amber/orange scrollbar */
   ::-webkit-scrollbar       { width: 4px; height: 4px; }
-  ::-webkit-scrollbar-track { background: #0a0a0a; }
-  ::-webkit-scrollbar-thumb { background: #39ff14; border-radius: 0; }
-  ::-webkit-scrollbar-thumb:hover { background: #2ee610; }
+  ::-webkit-scrollbar-track { background: #120E0B; }
+  ::-webkit-scrollbar-thumb { background: #FF6B00; border-radius: 0; }
+  ::-webkit-scrollbar-thumb:hover { background: #e55f00; }
 
-  /* Neon green selection */
+  /* Amber text selection */
   ::selection {
-    background-color: rgba(57, 255, 20, 0.22);
+    background-color: rgba(255, 107, 0, 0.28);
     color: #fff;
   }
 
-  /* Keyboard focus ring */
   :focus-visible {
-    outline: 2px solid #39ff14;
+    outline: 2px solid #FF6B00;
     outline-offset: 3px;
   }
   :focus:not(:focus-visible) { outline: none; }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   COMPONENTS — reusable design-system classes
+   COMPONENTS
 ═══════════════════════════════════════════════════════════ */
 @layer components {
 
-  /* ── Layout ── */
   .container-wide {
     @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
@@ -56,7 +55,7 @@
 
   /* ── Typography ── */
   .label-text {
-    @apply text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-[#39ff14];
+    @apply text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-[#FF6B00];
   }
 
   .heading-display {
@@ -74,25 +73,28 @@
   }
 
   /* ── Buttons ── */
-  .btn-gold {
+  .btn-primary {
     @apply inline-flex items-center justify-center gap-2
-           bg-[#39ff14] text-[#0a0a0a]
+           bg-[#FF6B00] text-black
            font-black text-[0.8125rem] uppercase tracking-[0.08em]
            px-7 py-[15px] select-none
            transition-all duration-150
-           hover:bg-[#2ee610] active:scale-[0.97]
+           hover:bg-[#e55f00] active:scale-[0.97]
            whitespace-nowrap cursor-pointer;
   }
 
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2
-           border border-white/20 text-white
+           border border-amber-900/50 text-white
            font-semibold text-[0.8125rem] uppercase tracking-[0.08em]
            px-7 py-[15px] select-none
            transition-all duration-150
-           hover:border-white/40 hover:bg-white/[0.04] active:scale-[0.97]
-           whitespace-nowrap cursor-pointer;
+           hover:border-[#FF6B00]/50 hover:bg-[#FF6B00]/[0.06] hover:text-[#FF6B00]
+           active:scale-[0.97] whitespace-nowrap cursor-pointer;
   }
+
+  /* Legacy alias */
+  .btn-gold { @apply btn-primary; }
 
   /* ── Calculator range slider ── */
   .calc-range {
@@ -102,8 +104,8 @@
     border-radius: 0;
     background: linear-gradient(
       to right,
-      #39ff14 var(--range-pct, 22%),
-      #2a2a2a var(--range-pct, 22%)
+      #FF6B00 var(--range-pct, 22%),
+      #2a2319 var(--range-pct, 22%)
     );
     cursor: pointer;
     outline: none;
@@ -113,37 +115,37 @@
     width: 18px;
     height: 18px;
     border-radius: 0;
-    background: #39ff14;
-    box-shadow: 0 0 0 3px #0a0a0a, 0 0 0 4.5px rgba(57,255,20,0.4);
+    background: #FF6B00;
+    box-shadow: 0 0 0 3px #120E0B, 0 0 0 4.5px rgba(255,107,0,0.45);
     cursor: pointer;
     transition: box-shadow 0.15s ease;
   }
   .calc-range::-webkit-slider-thumb:hover {
-    box-shadow: 0 0 0 3px #0a0a0a, 0 0 0 6px rgba(57,255,20,0.5);
+    box-shadow: 0 0 0 3px #120E0B, 0 0 0 6px rgba(255,107,0,0.55);
   }
   .calc-range::-moz-range-thumb {
     width: 18px;
     height: 18px;
     border-radius: 0;
     border: none;
-    background: #39ff14;
+    background: #FF6B00;
     cursor: pointer;
   }
 
   /* ── Form fields ── */
   .input-field {
     @apply w-full bg-transparent appearance-none
-           border-0 border-b border-white/[0.12]
+           border-0 border-b border-amber-900/30
            text-white placeholder-white/25 text-[0.9375rem]
-           py-3 focus:outline-none focus:border-[#39ff14]/60
+           py-3 focus:outline-none focus:border-[#FF6B00]/60
            transition-colors duration-200;
   }
 
   .input-field-dark {
     @apply w-full bg-transparent appearance-none
-           border-0 border-b border-white/[0.12]
+           border-0 border-b border-amber-900/30
            text-white placeholder-white/[0.22] text-[0.9375rem]
-           py-3 focus:outline-none focus:border-[#39ff14]/60
+           py-3 focus:outline-none focus:border-[#FF6B00]/60
            transition-colors duration-200;
   }
 }
@@ -165,12 +167,12 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   PREMIUM KEYFRAMES
+   KEYFRAMES
 ═══════════════════════════════════════════════════════════ */
 
-@keyframes neonPulse {
-  0%, 100% { text-shadow: 0 0 0px rgba(57,255,20,0); }
-  50%       { text-shadow: 0 0 20px rgba(57,255,20,0.6), 0 0 40px rgba(57,255,20,0.3); }
+@keyframes amberGlow {
+  0%, 100% { text-shadow: 0 0 0px rgba(255,107,0,0); }
+  50%       { text-shadow: 0 0 22px rgba(255,107,0,0.55), 0 0 44px rgba(255,107,0,0.25); }
 }
 
 @keyframes floatY {
@@ -181,11 +183,6 @@
 @keyframes shimmer {
   0%   { background-position: -200% center; }
   100% { background-position:  200% center; }
-}
-
-@keyframes scaleInX {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
 }
 
 @keyframes fadeInUp {
@@ -201,20 +198,19 @@
   80%       { transform: translateX(4px); }
 }
 
-/* Utility classes */
-.animate-neon-pulse { animation: neonPulse 3s ease-in-out infinite; }
-.animate-float      { animation: floatY   5s ease-in-out infinite; }
+.animate-amber-glow { animation: amberGlow 3.5s ease-in-out infinite; }
+.animate-float      { animation: floatY   5s  ease-in-out infinite; }
 .animate-fade-in    { animation: fadeInUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
 .animate-fade-up    { animation: fadeInUp 0.7s cubic-bezier(0.16,1,0.3,1) both; }
 
-/* Neon green shimmer text */
+/* Orange shimmer text */
 .text-shimmer {
   background: linear-gradient(
     90deg,
-    #39ff14 0%,
-    #7fff00 40%,
-    #39ff14 60%,
-    #2ee610 100%
+    #FF6B00 0%,
+    #ffb347 40%,
+    #FF6B00 60%,
+    #e55f00 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -227,11 +223,8 @@
    UTILITIES
 ═══════════════════════════════════════════════════════════ */
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  .text-balance { text-wrap: balance; }
 
-  /* CSS grain texture */
   .noise-layer::after {
     content: "";
     position: absolute;
