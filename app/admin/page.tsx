@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -531,9 +531,7 @@ function CasesTab() {
     { key: "highlight",    label: "Ключова метрика", placeholder: "6.3% конверсія"                                    },
     { key: "description",  label: "Опис",            placeholder: "Результати, ключові цифри...",       textarea: true },
     { key: "stats_text",   label: "Статистика (3 рядки: значення|підпис)", placeholder: "6.3%|конверсія лідів\n7 дн.|до запуску\n$1.1|ціна ліда", textarea: true },
-    { key: "mockup_type",  label: "Тип мокапу",      placeholder: "landing",                            select: [...MOCKUP_TYPE_OPTIONS] },
     { key: "accent_color", label: "Акцентний колір", placeholder: "#FF6B00"                                            },
-    { key: "image_url",    label: "URL зображення",  placeholder: "https://..."                                        },
     { key: "project_link", label: "Посилання",       placeholder: "https://kitchenbox.ua"                              },
   ];
 
@@ -622,18 +620,20 @@ function CasesTab() {
           saving={saving}
           disabled={!form.title.trim()}
         >
+          {/* Image upload — always first */}
+          <ImageUploadField
+            value={form.image_url}
+            onChange={(url) => setForm((p) => ({ ...p, image_url: url }))}
+          />
+
           {FIELDS.map((f) => (
             <ModalField key={f.key} label={f.label} required={f.required}
               input={
-                f.select
-                  ? <select value={form[f.key]} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))} className={IN_CLS}>
-                      {f.select.map((o) => <option key={o} value={o} className="bg-[#1a1412] text-white">{o}</option>)}
-                    </select>
-                  : f.textarea
-                    ? <textarea value={form[f.key]} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))}
-                                placeholder={f.placeholder} rows={f.key === "stats_text" ? 4 : 3} className={TA_CLS} />
-                    : <input type="text" value={form[f.key]} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))}
-                             placeholder={f.placeholder} required={f.required} className={IN_CLS} />
+                f.textarea
+                  ? <textarea value={form[f.key]} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))}
+                              placeholder={f.placeholder} rows={f.key === "stats_text" ? 4 : 3} className={TA_CLS} />
+                  : <input type="text" value={form[f.key]} onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))}
+                           placeholder={f.placeholder} required={f.required} className={IN_CLS} />
               }
             />
           ))}
@@ -1295,6 +1295,116 @@ function ModalField({ label, required, input }: { label: string; required?: bool
         {label}{required && <span className="text-red-400 ml-0.5">*</span>}
       </label>
       {input}
+    </div>
+  );
+}
+
+// ─── Image Upload Field ────────────────────────────────────────────────────────
+
+function ImageUploadField({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+  const [uploading, setUploading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setErr(null);
+    const fd = new FormData();
+    fd.append("file", file);
+    try {
+      const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? `HTTP ${res.status}`);
+      onChange(json.url);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Помилка завантаження");
+    } finally {
+      setUploading(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+
+  return (
+    <div>
+      <label className="block text-[0.6875rem] font-bold text-amber-100/35 uppercase tracking-[0.1em] mb-1.5">
+        Фото кейсу
+      </label>
+
+      {/* Preview */}
+      {value && (
+        <div className="relative mb-2.5 h-36 bg-[#0e0b08] border border-amber-900/30 overflow-hidden group/img">
+          <img src={value} alt="" className="w-full h-full object-cover" />
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            title="Видалити фото"
+            className="absolute top-2 right-2 w-7 h-7 bg-black/70 hover:bg-red-600/80
+                       text-white/70 hover:text-white flex items-center justify-center
+                       text-lg leading-none transition-colors"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
+      {/* Upload button + URL fallback */}
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={uploading}
+          className="flex items-center gap-1.5 px-3 py-2.5 border border-amber-900/30
+                     bg-amber-900/10 text-[0.8125rem] text-amber-100/50
+                     hover:text-white hover:border-amber-500/40 hover:bg-amber-900/20
+                     transition-colors disabled:opacity-40 disabled:cursor-wait whitespace-nowrap shrink-0"
+        >
+          {uploading ? (
+            <>
+              <svg className="animate-spin" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" strokeOpacity="0.2"/><path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/>
+              </svg>
+              Завантаження...
+            </>
+          ) : (
+            <>
+              <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M10 13V3m0 0L7 6m3-3l3 3"/><path d="M3 13v3a1 1 0 001 1h12a1 1 0 001-1v-3"/>
+              </svg>
+              Вибрати файл
+            </>
+          )}
+        </button>
+
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="або вставити URL зображення..."
+          className={IN_CLS}
+        />
+      </div>
+
+      {/* Hidden file input — all image formats */}
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,image/avif,image/svg+xml,image/heic,image/heif,image/bmp,image/tiff,.jpg,.jpeg,.png,.webp,.gif,.avif,.svg,.heic,.heif,.bmp,.tiff"
+        className="hidden"
+        onChange={handleFile}
+      />
+
+      <p className="mt-1.5 text-[0.625rem] text-amber-100/20">
+        JPG, PNG, WebP, GIF, AVIF, SVG, HEIC, BMP · до 10 МБ
+      </p>
+
+      {err && (
+        <p className="mt-1.5 text-xs text-red-400 flex items-center gap-1.5">
+          <span className="w-1 h-1 bg-red-400 shrink-0" />
+          {err}
+        </p>
+      )}
     </div>
   );
 }
